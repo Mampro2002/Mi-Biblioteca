@@ -818,6 +818,9 @@
   <button class="ghost" id="download" title="Descargar HTML autocontenido">
     💾<span class="btn-label"> Guardar página</span>
   </button>
+  <button class="ghost" id="sync" title="Actualizar desde GitHub">
+    🔄<span class="btn-label"> Sincronizar</span>
+  </button>
   <input type="file" id="file" accept=".json" hidden>
 
   <div class="search-wrap">
@@ -1398,7 +1401,46 @@ document.getElementById('file').addEventListener('change', e => {
   };
   reader.readAsText(file); e.target.value = '';
 });
+/* ---------- Sincronizar desde el servidor ---------- */
+document.getElementById('sync').addEventListener('click', async () => {
+  const btn = document.getElementById('sync');
+  const original = btn.innerHTML;
+  btn.innerHTML = '⏳';
+  btn.disabled = true;
 
+  try {
+    // Descarga el index.html más reciente (con cache-buster)
+    const url = './index.html?t=' + Date.now();
+    const res = await fetch(url, { cache: 'no-store' });
+    if (!res.ok) throw new Error('No se pudo descargar (' + res.status + ')');
+
+    const html = await res.text();
+
+    // Extrae el contenido del <script id="seed-data">
+    const match = html.match(/<script id="seed-data"[^>]*>([\s\S]*?)<\/script>/);
+    if (!match) throw new Error('No se encontró seed-data');
+    const seed = JSON.parse(match[1]);
+    if (!Array.isArray(seed)) throw new Error('seed-data inválido');
+
+    // Fusiona: los ids existentes se respetan (local gana), los nuevos se añaden
+    const existingIds = new Set(items.map(i => i.id));
+    const nuevos = seed.filter(i => i.id && !existingIds.has(i.id));
+
+    if (nuevos.length === 0) {
+      alert('✅ Ya estás al día. No hay marcadores nuevos.');
+    } else {
+      items = items.concat(nuevos);
+      save();
+      render();
+      alert(`✅ Sincronizados ${nuevos.length} marcadores nuevos.`);
+    }
+  } catch (err) {
+    alert('❌ Error al sincronizar: ' + err.message);
+  } finally {
+    btn.innerHTML = original;
+    btn.disabled = false;
+  }
+});
 /* ---------- PWA: registrar service worker ---------- */
 if ('serviceWorker' in navigator) {
   window.addEventListener('load', () => {
