@@ -8,7 +8,32 @@
 <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
 <meta name="apple-mobile-web-app-title" content="Mi Biblioteca">
 <meta name="format-detection" content="telephone=no">
+<link rel="manifest" id="pwa-manifest">
+<link rel="apple-touch-icon" href="icon.svg">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="mobile-web-app-capable" content="yes">
 <title>Mi Biblioteca</title>
+<script>
+  (function(){
+    const manifest = {
+      name: "Mi Biblioteca",
+      short_name: "Biblioteca",
+      description: "Mi colección personal de películas y series",
+      start_url: ".",
+      scope: ".",
+      display: "standalone",
+      orientation: "portrait-primary",
+      background_color: "#08090d",
+      theme_color: "#08090d",
+      icons: [
+        { src: "icon.svg", sizes: "any", type: "image/svg+xml", purpose: "any" },
+        { src: "icon.svg", sizes: "any", type: "image/svg+xml", purpose: "maskable" }
+      ]
+    };
+    const blob = new Blob([JSON.stringify(manifest)], {type: 'application/manifest+json'});
+    document.getElementById('pwa-manifest').href = URL.createObjectURL(blob);
+  })();
+  </script>
 <link rel="manifest" href="manifest.webmanifest">
 <link rel="icon" type="image/svg+xml" href="icon.svg">
 <link rel="apple-touch-icon" href="icon.svg">
@@ -11228,5 +11253,31 @@ if ('serviceWorker' in navigator) {
   render();
 })();
 </script>
+
+<script>
+  (function(){
+    const swCode = `
+      const CACHE = 'biblioteca-v1';
+      self.addEventListener('install', e => { self.skipWaiting(); });
+      self.addEventListener('activate', e => { e.waitUntil(self.clients.claim()); });
+      self.addEventListener('fetch', e => {
+        e.respondWith(
+          caches.match(e.request).then(r => r || fetch(e.request).then(res => {
+            const copy = res.clone();
+            caches.open(CACHE).then(c => c.put(e.request, copy)).catch(()=>{});
+            return res;
+          }).catch(() => caches.match('./index.html')))
+        );
+      });
+    `;
+    if ('serviceWorker' in navigator) {
+      const blob = new Blob([swCode], {type: 'application/javascript'});
+      const url = URL.createObjectURL(blob);
+      navigator.serviceWorker.register(url, {scope: './'}).catch(err => {
+        console.warn('SW no registrado:', err);
+      });
+    }
+  })();
+  </script>
 
 </body></html>
