@@ -1,0 +1,1381 @@
+<!DOCTYPE html>
+<html lang="es"><head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Mis Marcadores</title>
+<link rel="preconnect" href="https://rsms.me/">
+<link rel="stylesheet" href="https://rsms.me/inter/inter.css">
+<style>
+  *, *::before, *::after { box-sizing: border-box; }
+
+  :root{
+    --bg: #08090d;
+    --surface: rgba(22, 25, 34, 0.72);
+    --surface-2: rgba(30, 34, 46, 0.85);
+    --surface-3: #1c202b;
+    --border: rgba(255, 255, 255, 0.07);
+    --border-strong: rgba(255, 255, 255, 0.14);
+    --text: #eef1f8;
+    --text-soft: #b8c0d1;
+    --muted: #7c86a0;
+    --accent-1: #6366f1;
+    --accent-2: #a855f7;
+    --accent: #818cf8;
+    --accent-soft: rgba(129, 140, 248, 0.12);
+    --danger: #f87171;
+    --radius-sm: 10px;
+    --radius: 14px;
+    --radius-lg: 18px;
+    --radius-pill: 999px;
+    --shadow-sm: 0 1px 2px rgba(0,0,0,.35);
+    --shadow: 0 12px 32px -12px rgba(0,0,0,.55);
+    --shadow-lg: 0 24px 48px -16px rgba(0,0,0,.6);
+    --ring: 0 0 0 3px rgba(129, 140, 248, 0.25);
+    --gradient: linear-gradient(135deg, var(--accent-1), var(--accent-2));
+    --ease: cubic-bezier(.2, .8, .2, 1);
+  }
+
+  ::selection { background: rgba(129, 140, 248, 0.35); color: #fff; }
+
+  * { scrollbar-width: thin; scrollbar-color: rgba(255,255,255,.12) transparent; }
+  *::-webkit-scrollbar { width: 10px; height: 10px; }
+  *::-webkit-scrollbar-track { background: transparent; }
+  *::-webkit-scrollbar-thumb {
+    background: rgba(255,255,255,.1);
+    border-radius: 10px;
+    border: 2px solid transparent;
+    background-clip: content-box;
+  }
+  *::-webkit-scrollbar-thumb:hover { background: rgba(255,255,255,.2); background-clip: content-box; }
+
+  html { color-scheme: dark; }
+
+  body{
+    margin: 0;
+    min-height: 100vh;
+    background:
+      radial-gradient(1200px 600px at 15% -10%, rgba(99, 102, 241, 0.12), transparent 60%),
+      radial-gradient(900px 500px at 95% 0%, rgba(168, 85, 247, 0.10), transparent 55%),
+      radial-gradient(800px 400px at 50% 120%, rgba(56, 189, 248, 0.06), transparent 60%),
+      var(--bg);
+    color: var(--text);
+    font-family: "Inter", system-ui, -apple-system, "Segoe UI", Roboto, "Helvetica Neue", sans-serif;
+    font-size: 15px;
+    line-height: 1.5;
+    padding: 32px 24px 80px;
+    max-width: 1180px;
+    margin-inline: auto;
+    -webkit-font-smoothing: antialiased;
+    -moz-osx-font-smoothing: grayscale;
+    text-rendering: optimizeLegibility;
+  }
+
+  header{
+    display: flex;
+    flex-wrap: wrap;
+    gap: 12px;
+    align-items: center;
+    margin-bottom: 20px;
+  }
+
+  h1{
+    font-size: 1.35rem;
+    font-weight: 700;
+    letter-spacing: -0.02em;
+    margin: 0;
+    flex: 1;
+    background: linear-gradient(135deg, #ffffff 30%, var(--accent) 130%);
+    -webkit-background-clip: text;
+    background-clip: text;
+    color: transparent;
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    white-space: nowrap;
+  }
+
+  .main-nav{
+    display: flex;
+    gap: 6px;
+    margin-bottom: 24px;
+    padding: 5px;
+    background: var(--surface);
+    border: 1px solid var(--border);
+    border-radius: var(--radius-pill);
+    width: fit-content;
+    backdrop-filter: blur(10px);
+    -webkit-backdrop-filter: blur(10px);
+    box-shadow: var(--shadow-sm);
+  }
+
+  .main-nav button{
+    background: transparent;
+    border: none;
+    border-radius: var(--radius-pill);
+    padding: 9px 20px;
+    font-size: .88rem;
+    font-weight: 500;
+    color: var(--text-soft);
+    transition: all .2s var(--ease);
+    display: inline-flex;
+    align-items: center;
+    gap: 8px;
+  }
+  .main-nav button:hover:not(.active){
+    color: var(--text);
+    background: rgba(255,255,255,.04);
+  }
+  .main-nav button.active{
+    background: var(--gradient);
+    color: #fff;
+    font-weight: 600;
+    box-shadow: 0 6px 16px -6px rgba(99, 102, 241, 0.6);
+  }
+  .main-nav button .ico{ font-size: 1rem; line-height: 1; }
+
+  .view{ display: none; animation: viewIn .25s var(--ease) both; }
+  .view.active{ display: block; }
+
+  @keyframes viewIn {
+    from { opacity: 0; transform: translateY(6px); }
+    to   { opacity: 1; transform: translateY(0); }
+  }
+
+  input, select, textarea, button{
+    font: inherit;
+    color: var(--text);
+    background: var(--surface-3);
+    border: 1px solid var(--border);
+    border-radius: var(--radius-sm);
+    padding: 10px 14px;
+    transition: border-color .15s var(--ease),
+                background .15s var(--ease),
+                box-shadow .15s var(--ease),
+                transform .1s var(--ease);
+    outline: none;
+    min-width: 0;
+  }
+
+  input:hover, select:hover, textarea:hover { border-color: var(--border-strong); }
+
+  input:focus, select:focus, textarea:focus{
+    border-color: var(--accent);
+    box-shadow: var(--ring);
+    background: rgba(30, 34, 46, 1);
+  }
+
+  input::placeholder, textarea::placeholder { color: var(--muted); }
+
+  select{
+    appearance: none;
+    -webkit-appearance: none;
+    background-image: url("data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' width='12' height='12' viewBox='0 0 24 24' fill='none' stroke='%237c86a0' stroke-width='2.5' stroke-linecap='round' stroke-linejoin='round'><polyline points='6 9 12 15 18 9'/></svg>");
+    background-repeat: no-repeat;
+    background-position: right 12px center;
+    padding-right: 36px;
+    cursor: pointer;
+  }
+
+  button{
+    cursor: pointer;
+    font-weight: 500;
+    letter-spacing: 0.01em;
+    white-space: nowrap;
+    user-select: none;
+  }
+  button:active { transform: translateY(1px); }
+
+  button.ghost{
+    background: transparent;
+    border-color: var(--border);
+    color: var(--text-soft);
+  }
+  button.ghost:hover{
+    background: var(--surface-2);
+    border-color: var(--border-strong);
+    color: var(--text);
+  }
+
+  button.primary{
+    background: var(--gradient);
+    border: none;
+    color: #fff;
+    font-weight: 600;
+    box-shadow: 0 8px 20px -8px rgba(99, 102, 241, 0.6),
+                inset 0 1px 0 rgba(255,255,255,0.15);
+  }
+  button.primary:hover{
+    filter: brightness(1.1);
+    box-shadow: 0 12px 28px -8px rgba(99, 102, 241, 0.8),
+                inset 0 1px 0 rgba(255,255,255,0.2);
+  }
+
+  .search-wrap{
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    flex: 0 1 auto;
+  }
+
+  .search-wrap input[type=search]{
+    flex: 0 1 260px;
+    padding-left: 40px;
+    background-image: url("data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' width='16' height='16' viewBox='0 0 24 24' fill='none' stroke='%237c86a0' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'><circle cx='11' cy='11' r='8'/><path d='m21 21-4.3-4.3'/></svg>");
+    background-repeat: no-repeat;
+    background-position: 14px center;
+    border-radius: var(--radius-pill);
+    background-color: var(--surface-3);
+  }
+  .search-wrap input[type=search]::-webkit-search-cancel-button{ filter: invert(0.5); }
+
+  .search-wrap label{
+    display: flex;
+    align-items: center;
+    gap: 6px;
+    font-size: .8rem;
+    color: var(--muted);
+    cursor: pointer;
+    user-select: none;
+    padding: 8px 12px;
+    border-radius: var(--radius-pill);
+    border: 1px solid var(--border);
+    background: var(--surface);
+    transition: all .15s var(--ease);
+  }
+  .search-wrap label:hover{ color: var(--text-soft); border-color: var(--border-strong); }
+  .search-wrap label:has(input:checked){
+    color: var(--accent);
+    border-color: rgba(129, 140, 248, 0.4);
+    background: var(--accent-soft);
+  }
+
+  .search-wrap input[type=checkbox]{
+    width: auto;
+    padding: 0;
+    accent-color: var(--accent);
+    cursor: pointer;
+  }
+
+  .filters{ margin-bottom: 22px; }
+
+  .filter-row{
+    display: flex;
+    flex-wrap: wrap;
+    gap: 8px;
+    align-items: center;
+    margin-bottom: 10px;
+  }
+  .filter-row:last-child{ margin-bottom: 0; }
+
+  .filter-row .label{
+    font-size: .68rem;
+    color: var(--muted);
+    text-transform: uppercase;
+    letter-spacing: 0.14em;
+    font-weight: 600;
+    margin-right: 6px;
+    padding-right: 12px;
+    border-right: 1px solid var(--border);
+    line-height: 1;
+  }
+
+  .tab{
+    background: var(--surface);
+    border: 1px solid var(--border);
+    border-radius: var(--radius-pill);
+    padding: 7px 14px;
+    font-size: .82rem;
+    font-weight: 500;
+    color: var(--text-soft);
+    transition: all .18s var(--ease);
+    display: inline-flex;
+    align-items: center;
+    gap: 2px;
+  }
+  .tab:hover{
+    color: var(--text);
+    border-color: var(--border-strong);
+    background: var(--surface-2);
+    transform: translateY(-1px);
+  }
+  .tab.active{
+    background: var(--gradient);
+    border-color: transparent;
+    color: #fff;
+    font-weight: 600;
+    box-shadow: 0 6px 16px -6px rgba(99, 102, 241, 0.6);
+  }
+  .tab.active:hover{ filter: brightness(1.08); transform: translateY(-1px); }
+
+  .tab .count{
+    opacity: .75;
+    margin-left: 6px;
+    font-size: .75em;
+    font-variant-numeric: tabular-nums;
+    padding: 1px 7px;
+    border-radius: var(--radius-pill);
+    background: rgba(255,255,255,.06);
+    line-height: 1.4;
+  }
+  .tab.active .count{
+    background: rgba(0,0,0,.22);
+    opacity: .95;
+  }
+
+  .tools{
+    display: flex;
+    gap: 10px;
+    margin-bottom: 20px;
+    flex-wrap: wrap;
+  }
+  .tools button{ font-size: .85rem; padding: 9px 16px; }
+
+  .add-wrap{
+    max-width: 640px;
+    margin: 24px auto 0;
+  }
+
+  .add-head{
+    text-align: center;
+    margin-bottom: 24px;
+  }
+  .add-head h2{
+    font-size: 1.5rem;
+    font-weight: 700;
+    letter-spacing: -0.02em;
+    margin: 0 0 6px;
+    background: linear-gradient(135deg, #ffffff 30%, var(--accent) 130%);
+    -webkit-background-clip: text;
+    background-clip: text;
+    color: transparent;
+  }
+  .add-head p{
+    margin: 0;
+    color: var(--muted);
+    font-size: .9rem;
+  }
+
+  form.add{
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 16px;
+    background: var(--surface);
+    border: 1px solid var(--border);
+    border-radius: var(--radius-lg);
+    padding: 26px;
+    box-shadow: var(--shadow);
+    backdrop-filter: blur(12px);
+    -webkit-backdrop-filter: blur(12px);
+  }
+
+  form.add > div { min-width: 0; }
+  form.add .full { grid-column: 1 / -1; }
+
+  form.add label{
+    display: block;
+    font-size: .7rem;
+    color: var(--muted);
+    font-weight: 600;
+    text-transform: uppercase;
+    letter-spacing: 0.12em;
+    margin-bottom: 6px;
+  }
+
+  form.add input,
+  form.add select,
+  form.add textarea{ width: 100%; }
+
+  form.add textarea{
+    resize: vertical;
+    min-height: 90px;
+    line-height: 1.55;
+    font-family: inherit;
+  }
+
+  form.add .actions{
+    display: flex;
+    gap: 10px;
+    justify-content: flex-end;
+    padding-top: 4px;
+  }
+
+  @media (max-width: 640px){
+    form.add{ grid-template-columns: 1fr; padding: 20px; }
+  }
+
+  .grid{
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+    gap: 16px;
+  }
+
+  .card{
+    position: relative;
+    background: var(--surface);
+    border: 1px solid var(--border);
+    border-radius: var(--radius-lg);
+    padding: 16px;
+    display: flex;
+    gap: 14px;
+    align-items: flex-start;
+    backdrop-filter: blur(10px);
+    -webkit-backdrop-filter: blur(10px);
+    transition: border-color .2s var(--ease),
+                background .2s var(--ease),
+                transform .2s var(--ease),
+                box-shadow .2s var(--ease);
+    animation: cardIn .3s var(--ease) both;
+  }
+
+  @keyframes cardIn {
+    from { opacity: 0; transform: translateY(6px); }
+    to   { opacity: 1; transform: translateY(0); }
+  }
+
+  .card:hover{
+    border-color: var(--border-strong);
+    background: var(--surface-2);
+    transform: translateY(-3px);
+    box-shadow: var(--shadow-lg);
+  }
+
+  .card::after{
+    content: "";
+    position: absolute;
+    inset: -1px;
+    border-radius: inherit;
+    pointer-events: none;
+    background: linear-gradient(135deg, rgba(99,102,241,.25), rgba(168,85,247,.15));
+    opacity: 0;
+    transition: opacity .25s var(--ease);
+    z-index: -1;
+  }
+  .card:hover::after{ opacity: 1; }
+
+  .card img{
+    width: 32px;
+    height: 32px;
+    border-radius: 9px;
+    flex-shrink: 0;
+    background: rgba(0,0,0,.4);
+    padding: 3px;
+    border: 1px solid var(--border);
+    object-fit: contain;
+    margin-top: 2px;
+  }
+
+  .card .body{
+    min-width: 0;
+    flex: 1;
+    display: flex;
+    flex-direction: column;
+    gap: 4px;
+  }
+
+  .card a{
+    color: var(--text);
+    text-decoration: none;
+    font-weight: 600;
+    font-size: .97rem;
+    line-height: 1.35;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+    transition: color .15s var(--ease);
+    display: block;
+    padding-right: 20px;
+  }
+  .card a:hover{ color: var(--accent); }
+
+  .card .url{
+    font-size: .75rem;
+    color: var(--muted);
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+    font-family: ui-monospace, "SF Mono", Menlo, Consolas, monospace;
+    letter-spacing: -0.01em;
+  }
+
+  .card .tags{
+    margin-top: 6px;
+    display: flex;
+    gap: 6px;
+    flex-wrap: wrap;
+  }
+
+  .card .tag{
+    font-size: .68rem;
+    font-weight: 600;
+    background: rgba(255,255,255,.05);
+    border: 1px solid var(--border);
+    padding: 3px 9px;
+    border-radius: var(--radius-pill);
+    color: var(--text-soft);
+    letter-spacing: 0.02em;
+    white-space: nowrap;
+  }
+
+  .card .tag.genre{
+    color: var(--accent);
+    border-color: rgba(129, 140, 248, 0.35);
+    background: var(--accent-soft);
+  }
+
+  .card .notes{
+    font-size: .82rem;
+    color: var(--muted);
+    margin-top: 8px;
+    padding-top: 8px;
+    border-top: 1px dashed var(--border);
+    white-space: pre-wrap;
+    line-height: 1.5;
+    word-break: break-word;
+  }
+
+  .card .del{
+    position: absolute;
+    top: 10px;
+    right: 10px;
+    background: transparent;
+    border: 1px solid transparent;
+    color: var(--muted);
+    font-size: .85rem;
+    padding: 4px 8px;
+    line-height: 1;
+    border-radius: 8px;
+    opacity: 0;
+    transform: scale(.9);
+    transition: all .15s var(--ease);
+    cursor: pointer;
+  }
+  .card:hover .del{ opacity: 1; transform: scale(1); }
+  .card .del:hover{
+    color: var(--danger);
+    background: rgba(248, 113, 113, 0.1);
+    border-color: rgba(248, 113, 113, 0.3);
+  }
+  .card .del:active{ transform: scale(.92); }
+
+  .empty{
+    grid-column: 1 / -1;
+    color: var(--muted);
+    text-align: center;
+    padding: 72px 20px;
+    font-size: .95rem;
+    border: 1px dashed var(--border);
+    border-radius: var(--radius-lg);
+    background: rgba(255,255,255,.015);
+  }
+  .empty::before{
+    content: "🔍";
+    display: block;
+    font-size: 2.5rem;
+    margin-bottom: 12px;
+    opacity: .5;
+  }
+
+  @media (max-width: 640px){
+    body{ padding: 20px 16px 60px; }
+    header{ gap: 10px; }
+    h1{ font-size: 1.15rem; }
+    .search-wrap{ flex: 1 1 100%; }
+    .search-wrap input[type=search]{ flex: 1 1 auto; }
+    .grid{ grid-template-columns: 1fr; }
+    .tools button{ flex: 1; }
+    .main-nav{ width: 100%; }
+    .main-nav button{ flex: 1; justify-content: center; }
+  }
+
+  @media (prefers-reduced-motion: reduce){
+    *, *::before, *::after{
+      animation-duration: 0.01ms !important;
+      transition-duration: 0.01ms !important;
+    }
+  }
+
+  :focus-visible{
+    outline: 2px solid var(--accent);
+    outline-offset: 2px;
+  }
+</style>
+</head>
+<body>
+
+<header>
+  <h1>🔖 Mis Marcadores</h1>
+  <div class="search-wrap">
+    <input id="search" type="search" placeholder="Buscar…" value="">
+    <label title="Ignorar el filtro de carpeta/género y buscar en TODAS">
+      <input type="checkbox" id="searchGlobal"> en todas
+    </label>
+  </div>
+  <button class="ghost" id="export">Exportar</button>
+  <button class="ghost" id="import">Importar</button>
+  <button class="ghost" id="download" title="Descarga un HTML con todos tus datos incrustados">💾 Guardar página</button>
+  <input type="file" id="file" accept=".json" hidden="" value="">
+</header>
+
+<nav class="main-nav">
+  <button class="active" data-view="list"><span class="ico">📚</span> Marcadores</button>
+  <button data-view="add" class=""><span class="ico">➕</span> Añadir</button>
+</nav>
+
+<!-- ============ VISTA: LISTADO ============ -->
+<section class="view active" id="view-list">
+  <div class="filters">
+    <div class="filter-row" id="tabsList"><span class="label">Lista</span><button class="tab active" data-tab="all">
+        Todos<span class="count">701</span></button><button class="tab" data-tab="Películas vistas">
+        Películas vistas<span class="count">418</span></button><button class="tab" data-tab="Películas por ver">
+        Películas por ver<span class="count">108</span></button><button class="tab" data-tab="Series vistas">
+        Series vistas<span class="count">36</span></button><button class="tab" data-tab="Series por ver">
+        Series por ver<span class="count">139</span></button></div>
+    <div class="filter-row" id="tabsGenre"><span class="label">Género</span><button class="tab active" data-genre="all">
+        Todos<span class="count">701</span></button><button class="tab" data-genre="Acción">
+        Acción<span class="count">139</span></button><button class="tab" data-genre="Animación">
+        Animación<span class="count">119</span></button><button class="tab" data-genre="Aventura">
+        Aventura<span class="count">23</span></button><button class="tab" data-genre="Bélica">
+        Bélica<span class="count">1</span></button><button class="tab" data-genre="Ciencia ficción">
+        Ciencia ficción<span class="count">50</span></button><button class="tab" data-genre="Comedia">
+        Comedia<span class="count">139</span></button><button class="tab" data-genre="Crimen">
+        Crimen<span class="count">27</span></button><button class="tab" data-genre="Drama">
+        Drama<span class="count">42</span></button><button class="tab" data-genre="Familiar">
+        Familiar<span class="count">11</span></button><button class="tab" data-genre="Fantasía">
+        Fantasía<span class="count">15</span></button><button class="tab" data-genre="Misterio">
+        Misterio<span class="count">9</span></button><button class="tab" data-genre="Musical">
+        Musical<span class="count">2</span></button><button class="tab" data-genre="Romance">
+        Romance<span class="count">83</span></button><button class="tab" data-genre="Terror">
+        Terror<span class="count">27</span></button><button class="tab" data-genre="Thriller">
+        Thriller<span class="count">11</span></button><button class="tab" data-genre="Western">
+        Western<span class="count">3</span></button></div>
+  </div>
+
+  <div class="tools">
+    <button class="primary" id="autoclasificar">🏷️ Autoclasificar géneros por título</button>
+    <button class="ghost" id="autoclasificarForce">🔁 Reasignar TODOS los géneros</button>
+  </div>
+
+  <div class="grid" id="grid">
+    <div class="card">
+      <img src="https://www.google.com/s2/favicons?domain=hdfull.org&amp;sz=64" alt="" loading="lazy" onerror="this.style.visibility='hidden'">
+      <div class="body">
+        <a href="https://hdfull.org/pelicula/the-amazing-spider-man" target="_blank" rel="noopener">The Amazing Spider-Man</a>
+        <div class="url">hdfull.org</div>
+        <div class="tags">
+          <span class="tag">Películas vistas</span>
+          <span class="tag genre">Acción</span>
+        </div>
+        
+      </div>
+      <button class="del" data-del="mv-0276" title="Eliminar">✕</button>
+    </div>
+  
+    <div class="card">
+      <img src="https://www.google.com/s2/favicons?domain=hdfull.org&amp;sz=64" alt="" loading="lazy" onerror="this.style.visibility='hidden'">
+      <div class="body">
+        <a href="https://hdfull.org/pelicula/spider-man-into-the-spider-verse" target="_blank" rel="noopener">Spider-Man: Into the Spider-Verse</a>
+        <div class="url">hdfull.org</div>
+        <div class="tags">
+          <span class="tag">Películas vistas</span>
+          <span class="tag genre">Animación</span>
+        </div>
+        
+      </div>
+      <button class="del" data-del="mv-0052" title="Eliminar">✕</button>
+    </div>
+  
+    <div class="card">
+      <img src="https://www.google.com/s2/favicons?domain=hdfull.org&amp;sz=64" alt="" loading="lazy" onerror="this.style.visibility='hidden'">
+      <div class="body">
+        <a href="https://hdfull.org/pelicula/spider-man-across-the-spider-verse" target="_blank" rel="noopener">Spider-Man: Across the Spider-Verse</a>
+        <div class="url">hdfull.org</div>
+        <div class="tags">
+          <span class="tag">Películas vistas</span>
+          <span class="tag genre">Animación</span>
+        </div>
+        
+      </div>
+      <button class="del" data-del="mv-0051" title="Eliminar">✕</button>
+    </div>
+  
+    <div class="card">
+      <img src="https://www.google.com/s2/favicons?domain=hdfull.org&amp;sz=64" alt="" loading="lazy" onerror="this.style.visibility='hidden'">
+      <div class="body">
+        <a href="https://hdfull.org/pelicula/spider-man" target="_blank" rel="noopener">Spider-Man</a>
+        <div class="url">hdfull.org</div>
+        <div class="tags">
+          <span class="tag">Películas vistas</span>
+          <span class="tag genre">Acción</span>
+        </div>
+        
+      </div>
+      <button class="del" data-del="mv-0050" title="Eliminar">✕</button>
+    </div>
+  
+    <div class="card">
+      <img src="https://www.google.com/s2/favicons?domain=hdfull.org&amp;sz=64" alt="" loading="lazy" onerror="this.style.visibility='hidden'">
+      <div class="body">
+        <a href="https://hdfull.org/pelicula/spider-man-2" target="_blank" rel="noopener">Spider-Man 2</a>
+        <div class="url">hdfull.org</div>
+        <div class="tags">
+          <span class="tag">Películas vistas</span>
+          <span class="tag genre">Acción</span>
+        </div>
+        
+      </div>
+      <button class="del" data-del="mv-0049" title="Eliminar">✕</button>
+    </div>
+  
+    <div class="card">
+      <img src="https://www.google.com/s2/favicons?domain=hdfull.org&amp;sz=64" alt="" loading="lazy" onerror="this.style.visibility='hidden'">
+      <div class="body">
+        <a href="https://hdfull.org/pelicula/spider-man-3" target="_blank" rel="noopener">Spider-Man 3</a>
+        <div class="url">hdfull.org</div>
+        <div class="tags">
+          <span class="tag">Películas vistas</span>
+          <span class="tag genre">Acción</span>
+        </div>
+        
+      </div>
+      <button class="del" data-del="mv-0048" title="Eliminar">✕</button>
+    </div>
+  
+    <div class="card">
+      <img src="https://www.google.com/s2/favicons?domain=hdfull.org&amp;sz=64" alt="" loading="lazy" onerror="this.style.visibility='hidden'">
+      <div class="body">
+        <a href="https://hdfull.org/pelicula/spider-man-far-from-home" target="_blank" rel="noopener">Spider-Man: Far From Home</a>
+        <div class="url">hdfull.org</div>
+        <div class="tags">
+          <span class="tag">Películas vistas</span>
+          <span class="tag genre">Acción</span>
+        </div>
+        
+      </div>
+      <button class="del" data-del="mv-0047" title="Eliminar">✕</button>
+    </div>
+  
+    <div class="card">
+      <img src="https://www.google.com/s2/favicons?domain=hdfull.org&amp;sz=64" alt="" loading="lazy" onerror="this.style.visibility='hidden'">
+      <div class="body">
+        <a href="https://hdfull.org/pelicula/the-amazing-spider-man-2" target="_blank" rel="noopener">The Amazing Spider-Man 2</a>
+        <div class="url">hdfull.org</div>
+        <div class="tags">
+          <span class="tag">Películas vistas</span>
+          <span class="tag genre">Acción</span>
+        </div>
+        
+      </div>
+      <button class="del" data-del="mv-0046" title="Eliminar">✕</button>
+    </div>
+  
+    <div class="card">
+      <img src="https://www.google.com/s2/favicons?domain=hdfull.org&amp;sz=64" alt="" loading="lazy" onerror="this.style.visibility='hidden'">
+      <div class="body">
+        <a href="https://hdfull.org/pelicula/spider-man-no-way-home" target="_blank" rel="noopener">Spider-Man: No Way Home</a>
+        <div class="url">hdfull.org</div>
+        <div class="tags">
+          <span class="tag">Películas vistas</span>
+          <span class="tag genre">Acción</span>
+        </div>
+        
+      </div>
+      <button class="del" data-del="mv-0045" title="Eliminar">✕</button>
+    </div>
+  
+    <div class="card">
+      <img src="https://www.google.com/s2/favicons?domain=hdfull.org&amp;sz=64" alt="" loading="lazy" onerror="this.style.visibility='hidden'">
+      <div class="body">
+        <a href="https://hdfull.org/pelicula/spider-man-brand-new-day" target="_blank" rel="noopener">Spider-Man: Brand New Day</a>
+        <div class="url">hdfull.org</div>
+        <div class="tags">
+          <span class="tag">Películas vistas</span>
+          <span class="tag genre">Acción</span>
+        </div>
+        
+      </div>
+      <button class="del" data-del="mv-0001" title="Eliminar">✕</button>
+    </div>
+  </div>
+</section>
+
+<!-- ============ VISTA: AÑADIR ============ -->
+<section class="view" id="view-add">
+  <div class="add-wrap">
+    <div class="add-head">
+      <h2>Añadir marcador</h2>
+      <p>Rellena los campos y pulsa Añadir para guardarlo.</p>
+    </div>
+
+    <form class="add" id="form">
+      <div>
+        <label for="f-title">Título</label>
+        <input id="f-title" name="title" placeholder="Interestelar" required="" value="">
+      </div>
+      <div>
+        <label for="f-url">URL</label>
+        <input id="f-url" name="url" placeholder="https://…" required="" value="">
+      </div>
+      <div>
+        <label for="f-cat">Carpeta</label>
+        <select id="f-cat" name="category"><option>Películas vistas</option><option>Películas por ver</option><option>Series vistas</option><option>Series por ver</option></select>
+      </div>
+      <div>
+        <label for="f-genre">Género</label>
+        <select id="f-genre" name="genre"><option value="">Sin género</option><option>Acción</option><option>Aventura</option><option>Animación</option><option>Comedia</option><option>Crimen</option><option>Documental</option><option>Drama</option><option>Familiar</option><option>Fantasía</option><option>Historia</option><option>Musical</option><option>Misterio</option><option>Romance</option><option>Ciencia ficción</option><option>Thriller</option><option>Terror</option><option>Bélica</option><option>Western</option></select>
+      </div>
+      <div class="full">
+        <label for="f-notes">Notas (opcional)</label>
+        <textarea id="f-notes" name="notes" placeholder="Dónde lo vi, valoración, en qué episodio vas…" value=""></textarea>
+      </div>
+      <div class="actions full">
+        <button type="reset" class="ghost">Limpiar</button>
+        <button type="submit" class="primary">Añadir marcador</button>
+      </div>
+    </form>
+  </div>
+</section>
+
+<!-- ============ SEED (datos incrustados) ============ -->
+<script id="seed-data" type="application/json">[{"id":"mv-0001","title":"Spider-Man: Brand New Day","url":"https://hdfull.org/pelicula/spider-man-brand-new-day","category":"Películas vistas","genre":"Acción","notes":"","createdAt":1},{"id":"mv-0002","title":"The Love Hypothesis","url":"https://hdfull.org/pelicula/the-love-hypothesis","category":"Películas vistas","genre":"Romance","notes":"","createdAt":2},{"id":"mv-0003","title":"Pixels","url":"https://hdfull.org/pelicula/pixels","category":"Películas vistas","genre":"Comedia","notes":"","createdAt":3},{"id":"mv-0004","title":"Twisters","url":"https://hdfull.org/pelicula/twisters","category":"Películas vistas","genre":"Acción","notes":"","createdAt":4},{"id":"mv-0005","title":"Moana (2026)","url":"https://hdfull.org/pelicula/moana-2026","category":"Películas vistas","genre":"Animación","notes":"","createdAt":5},{"id":"mv-0006","title":"Sterling Point","url":"https://hdfull.org/serie/sterling-point","category":"Series vistas","genre":"Drama","notes":"Estaba en carpeta de películas","createdAt":6},{"id":"mv-0007","title":"Brave","url":"https://hdfull.org/pelicula/brave","category":"Películas vistas","genre":"Animación","notes":"","createdAt":7},{"id":"mv-0008","title":"Moana 2","url":"https://hdfull.org/pelicula/moana--2","category":"Películas vistas","genre":"Animación","notes":"","createdAt":8},{"id":"mv-0009","title":"Moana","url":"https://hdfull.org/pelicula/moana","category":"Películas vistas","genre":"Animación","notes":"","createdAt":9},{"id":"mv-0010","title":"Coyote vs. Acme","url":"https://hdfull.org/pelicula/coyote-vs-acme","category":"Películas vistas","genre":"Animación","notes":"","createdAt":10},{"id":"mv-0011","title":"Night at the Museum: Secret of the Tomb","url":"https://hdfull.org/pelicula/night-at-the-museum-secret-of-the-tomb","category":"Películas vistas","genre":"Aventura","notes":"","createdAt":11},{"id":"mv-0012","title":"Night at the Museum: Battle of the Smithsonian","url":"https://hdfull.org/pelicula/night-at-the-museum-battle-of-the-smithsonian","category":"Películas vistas","genre":"Aventura","notes":"","createdAt":12},{"id":"mv-0013","title":"Night at the Museum","url":"https://hdfull.org/pelicula/night-at-the-museum","category":"Películas vistas","genre":"Aventura","notes":"","createdAt":13},{"id":"mv-0014","title":"Nine Lives","url":"https://hdfull.org/pelicula/nine-lives","category":"Películas vistas","genre":"Comedia","notes":"","createdAt":14},{"id":"mv-0015","title":"Toy Story 4","url":"https://hdfull.org/pelicula/toy-story-4","category":"Películas vistas","genre":"Animación","notes":"","createdAt":15},{"id":"mv-0016","title":"Toy Story 3","url":"https://hdfull.org/pelicula/toy-story-3","category":"Películas vistas","genre":"Animación","notes":"","createdAt":16},{"id":"mv-0017","title":"Toy Story 2","url":"https://hdfull.org/pelicula/toy-story-2","category":"Películas vistas","genre":"Animación","notes":"","createdAt":17},{"id":"mv-0018","title":"Toy Story","url":"https://hdfull.org/pelicula/toy-story","category":"Películas vistas","genre":"Animación","notes":"","createdAt":18},{"id":"mv-0019","title":"Toy Story 5","url":"https://hdfull.org/pelicula/toy-story-5","category":"Películas vistas","genre":"Animación","notes":"","createdAt":19},{"id":"mv-0020","title":"The Legend of Hei 2","url":"https://hdfull.org/pelicula/the-legend-of-hei-2","category":"Películas vistas","genre":"Animación","notes":"","createdAt":20},{"id":"mv-0021","title":"The Legend of Hei","url":"https://hdfull.org/pelicula/the-legend-of-hei","category":"Películas vistas","genre":"Animación","notes":"","createdAt":21},{"id":"mv-0022","title":"Captain America: The First Avenger","url":"https://hdfull.org/pelicula/captain-america-the-first-avenger","category":"Películas vistas","genre":"Acción","notes":"","createdAt":22},{"id":"mv-0023","title":"Superman (2025)","url":"https://hdfull.org/pelicula/superman-2025","category":"Películas vistas","genre":"Acción","notes":"","createdAt":23},{"id":"mv-0024","title":"Supergirl (2026)","url":"https://hdfull.org/pelicula/supergirl-2026","category":"Películas vistas","genre":"Acción","notes":"","createdAt":24},{"id":"mv-0025","title":"Monster House","url":"https://hdfull.org/pelicula/monster-house","category":"Películas vistas","genre":"Animación","notes":"","createdAt":25},{"id":"mv-0026","title":"Office Romance","url":"https://hdfull.org/pelicula/office-romance","category":"Películas vistas","genre":"Romance","notes":"","createdAt":26},{"id":"mv-0027","title":"A Tourist's Guide to Love","url":"https://hdfull.org/pelicula/a-tourists-guide-to-love","category":"Películas vistas","genre":"Romance","notes":"","createdAt":27},{"id":"mv-0028","title":"Cold Storage","url":"https://hdfull.org/pelicula/cold-storage","category":"Películas vistas","genre":"Thriller","notes":"","createdAt":28},{"id":"mv-0029","title":"Masters of the Universe (2026)","url":"https://hdfull.org/pelicula/masters-of-the-universe-2026","category":"Películas vistas","genre":"Acción","notes":"","createdAt":29},{"id":"mv-0030","title":"She's All That","url":"https://hdfull.org/pelicula/shes-all-that","category":"Películas vistas","genre":"Romance","notes":"","createdAt":30},{"id":"mv-0031","title":"He's All That","url":"https://hdfull.org/pelicula/hes-all-that","category":"Películas vistas","genre":"Romance","notes":"","createdAt":31},{"id":"mv-0032","title":"Totally Killer","url":"https://hdfull.org/pelicula/totally-killer","category":"Películas vistas","genre":"Terror","notes":"","createdAt":32},{"id":"mv-0033","title":"Real Steel","url":"https://hdfull.org/pelicula/real-steel","category":"Películas vistas","genre":"Acción","notes":"","createdAt":33},{"id":"mv-0034","title":"Hotel Transylvania 2","url":"https://hdfull.org/pelicula/hotel-transylvania-2","category":"Películas vistas","genre":"Animación","notes":"","createdAt":34},{"id":"mv-0035","title":"Hotel Transylvania","url":"https://hdfull.org/pelicula/hotel-transylvania","category":"Películas vistas","genre":"Animación","notes":"","createdAt":35},{"id":"mv-0036","title":"Enola Holmes 2","url":"https://hdfull.org/pelicula/enola-holmes-2","category":"Películas vistas","genre":"Misterio","notes":"","createdAt":36},{"id":"mv-0037","title":"Enola Holmes 3","url":"https://hdfull.org/pelicula/enola-holmes-3","category":"Películas vistas","genre":"Misterio","notes":"","createdAt":37},{"id":"mv-0038","title":"Solo Mío","url":"https://hdfull.org/pelicula/solo-mio","category":"Películas vistas","genre":"Romance","notes":"","createdAt":38},{"id":"mv-0039","title":"Passengers","url":"https://hdfull.org/pelicula/passengers","category":"Películas vistas","genre":"Ciencia ficción","notes":"","createdAt":39},{"id":"mv-0040","title":"Voicemails for Isabelle","url":"https://hdfull.org/pelicula/voicemails-for-isabelle","category":"Películas vistas","genre":"Romance","notes":"","createdAt":40},{"id":"mv-0041","title":"Guardians of the Galaxy Vol. 2","url":"https://hdfull.org/pelicula/guardians-of-the-galaxy-vol-2","category":"Películas vistas","genre":"Acción","notes":"","createdAt":41},{"id":"mv-0042","title":"Guardians of the Galaxy","url":"https://hdfull.org/pelicula/guardians-of-the-galaxy","category":"Películas vistas","genre":"Acción","notes":"","createdAt":42},{"id":"mv-0043","title":"Birds of Prey (and the Fantabulous Emancipation of One Harley Quinn)","url":"https://hdfull.org/pelicula/birds-of-prey-and-the-fantabulous-emancipation-of-","category":"Películas vistas","genre":"Acción","notes":"","createdAt":43},{"id":"mv-0044","title":"Guardians of the Galaxy Vol. 3","url":"https://hdfull.org/pelicula/guardians-of-the-galaxy-volume-3","category":"Películas vistas","genre":"Acción","notes":"","createdAt":44},{"id":"mv-0045","title":"Spider-Man: No Way Home","url":"https://hdfull.org/pelicula/spider-man-no-way-home","category":"Películas vistas","genre":"Acción","notes":"","createdAt":45},{"id":"mv-0046","title":"The Amazing Spider-Man 2","url":"https://hdfull.org/pelicula/the-amazing-spider-man-2","category":"Películas vistas","genre":"Acción","notes":"","createdAt":46},{"id":"mv-0047","title":"Spider-Man: Far From Home","url":"https://hdfull.org/pelicula/spider-man-far-from-home","category":"Películas vistas","genre":"Acción","notes":"","createdAt":47},{"id":"mv-0048","title":"Spider-Man 3","url":"https://hdfull.org/pelicula/spider-man-3","category":"Películas vistas","genre":"Acción","notes":"","createdAt":48},{"id":"mv-0049","title":"Spider-Man 2","url":"https://hdfull.org/pelicula/spider-man-2","category":"Películas vistas","genre":"Acción","notes":"","createdAt":49},{"id":"mv-0050","title":"Spider-Man","url":"https://hdfull.org/pelicula/spider-man","category":"Películas vistas","genre":"Acción","notes":"","createdAt":50},{"id":"mv-0051","title":"Spider-Man: Across the Spider-Verse","url":"https://hdfull.org/pelicula/spider-man-across-the-spider-verse","category":"Películas vistas","genre":"Animación","notes":"","createdAt":51},{"id":"mv-0052","title":"Spider-Man: Into the Spider-Verse","url":"https://hdfull.org/pelicula/spider-man-into-the-spider-verse","category":"Películas vistas","genre":"Animación","notes":"","createdAt":52},{"id":"mv-0053","title":"Maintenance Required","url":"https://hdfull.org/pelicula/maintenance-required","category":"Películas vistas","genre":"Comedia","notes":"","createdAt":53},{"id":"mv-0054","title":"Frequency","url":"https://hdfull.org/pelicula/frequency","category":"Películas vistas","genre":"Ciencia ficción","notes":"","createdAt":54},{"id":"mv-0055","title":"Last Action Hero","url":"https://hdfull.org/pelicula/last-action-hero","category":"Películas vistas","genre":"Acción","notes":"","createdAt":55},{"id":"mv-0056","title":"Love Hurts (2025)","url":"https://hdfull.org/pelicula/love-hurts-2025","category":"Películas vistas","genre":"Acción","notes":"","createdAt":56},{"id":"mv-0057","title":"Freakier Friday","url":"https://hdfull.org/pelicula/freakier-friday","category":"Películas vistas","genre":"Comedia","notes":"","createdAt":57},{"id":"mv-0058","title":"The Sleeping Dictionary","url":"https://hdfull.org/pelicula/the-sleeping-dictionary","category":"Películas vistas","genre":"Romance","notes":"","createdAt":58},{"id":"mv-0059","title":"Henchmen","url":"https://hdfull.org/pelicula/henchmen","category":"Películas vistas","genre":"Animación","notes":"","createdAt":59},{"id":"mv-0060","title":"Mortal Kombat II","url":"https://hdfull.org/pelicula/mortal-kombat-ii","category":"Películas vistas","genre":"Acción","notes":"","createdAt":60},{"id":"mv-0061","title":"Over Your Dead Body","url":"https://hdfull.org/pelicula/over-your-dead-body","category":"Películas vistas","genre":"Terror","notes":"","createdAt":61},{"id":"mv-0062","title":"Purple Hearts (2022)","url":"https://hdfull.org/pelicula/purple-hearts-2022","category":"Películas vistas","genre":"Romance","notes":"","createdAt":62},{"id":"mv-0063","title":"Jupiter Ascending","url":"https://hdfull.org/pelicula/jupiter-ascending","category":"Películas vistas","genre":"Ciencia ficción","notes":"","createdAt":63},{"id":"mv-0064","title":"Rio","url":"https://hdfull.org/pelicula/rio","category":"Películas vistas","genre":"Animación","notes":"","createdAt":64},{"id":"mv-0065","title":"Sahara (2017)","url":"https://hdfull.org/pelicula/sahara-2017","category":"Películas vistas","genre":"Aventura","notes":"","createdAt":65},{"id":"mv-0066","title":"The Wild Robot","url":"https://hdfull.org/pelicula/the-wild-robot","category":"Películas vistas","genre":"Animación","notes":"","createdAt":66},{"id":"mv-0067","title":"Peter Rabbit","url":"https://hdfull.org/pelicula/peter-rabbit","category":"Películas vistas","genre":"Animación","notes":"","createdAt":67},{"id":"mv-0068","title":"Next Gen","url":"https://hdfull.org/pelicula/next-gen","category":"Películas vistas","genre":"Animación","notes":"","createdAt":68},{"id":"mv-0069","title":"Luca","url":"https://hdfull.org/pelicula/luca","category":"Películas vistas","genre":"Animación","notes":"","createdAt":69},{"id":"mv-0070","title":"Strange World","url":"https://hdfull.org/pelicula/strange-world","category":"Películas vistas","genre":"Animación","notes":"","createdAt":70},{"id":"mv-0071","title":"Dolittle","url":"https://hdfull.org/pelicula/dolittle","category":"Películas vistas","genre":"Aventura","notes":"","createdAt":71},{"id":"mv-0072","title":"Zookeeper","url":"https://hdfull.org/pelicula/zookeeper","category":"Películas vistas","genre":"Comedia","notes":"","createdAt":72},{"id":"mv-0073","title":"Hoppers","url":"https://hdfull.org/pelicula/hoppers","category":"Películas vistas","genre":"Animación","notes":"","createdAt":73},{"id":"mv-0074","title":"No Manches Frida","url":"https://hdfull.org/pelicula/no-manches-frida","category":"Películas vistas","genre":"Comedia","notes":"","createdAt":74},{"id":"mv-0075","title":"Matusalén","url":"https://hdfull.org/pelicula/matusalen","category":"Películas vistas","genre":"Comedia","notes":"","createdAt":75},{"id":"mv-0076","title":"Quién es Quién","url":"https://hdfull.org/pelicula/quien-es-quien","category":"Películas vistas","genre":"Comedia","notes":"","createdAt":76},{"id":"mv-0077","title":"Upside Down","url":"https://hdfull.org/pelicula/upside-down","category":"Películas vistas","genre":"Ciencia ficción","notes":"","createdAt":77},{"id":"mv-0078","title":"The Man from Toronto","url":"https://hdfull.org/pelicula/the-man-from-toronto","category":"Películas vistas","genre":"Acción","notes":"","createdAt":78},{"id":"mv-0079","title":"Drillbit Taylor","url":"https://hdfull.org/pelicula/drillbit-taylor","category":"Películas vistas","genre":"Comedia","notes":"","createdAt":79},{"id":"mv-0080","title":"Rush Hour","url":"https://hdfull.org/pelicula/rush-hour","category":"Películas vistas","genre":"Acción","notes":"","createdAt":80},{"id":"mv-0081","title":"Maleficent: Mistress of Evil","url":"https://hdfull.org/pelicula/maleficent-mistress-of-evil","category":"Películas vistas","genre":"Fantasía","notes":"","createdAt":81},{"id":"mv-0082","title":"Maleficent","url":"https://hdfull.org/pelicula/maleficent","category":"Películas vistas","genre":"Fantasía","notes":"","createdAt":82},{"id":"mv-0083","title":"Sonic the Hedgehog 3","url":"https://hdfull.org/pelicula/sonic-the-hedgehog-3","category":"Películas vistas","genre":"Aventura","notes":"","createdAt":83},{"id":"mv-0084","title":"Sonic the Hedgehog 2","url":"https://hdfull.org/pelicula/sonic-the-hedgehog-2","category":"Películas vistas","genre":"Aventura","notes":"","createdAt":84},{"id":"mv-0085","title":"Sonic the Hedgehog","url":"https://hdfull.org/pelicula/sonic-the-hedgehog","category":"Películas vistas","genre":"Aventura","notes":"","createdAt":85},{"id":"mv-0086","title":"GOAT (2026)","url":"https://hdfull.org/pelicula/goat-2026","category":"Películas vistas","genre":"Animación","notes":"","createdAt":86},{"id":"mv-0087","title":"Liar Liar","url":"https://hdfull.org/pelicula/liar-liar","category":"Películas vistas","genre":"Comedia","notes":"","createdAt":87},{"id":"mv-0088","title":"Sherlock Holmes","url":"https://hdfull.org/pelicula/sherlock-holmes","category":"Películas vistas","genre":"Misterio","notes":"","createdAt":88},{"id":"mv-0089","title":"One for the Money","url":"https://hdfull.org/pelicula/one-for-the-money","category":"Películas vistas","genre":"Crimen","notes":"","createdAt":89},{"id":"mv-0090","title":"D.E.B.S.","url":"https://hdfull.org/pelicula/debs","category":"Películas vistas","genre":"Comedia","notes":"","createdAt":90},{"id":"mv-0091","title":"The Marvels","url":"https://hdfull.org/pelicula/the-marvels","category":"Películas vistas","genre":"Acción","notes":"","createdAt":91},{"id":"mv-0092","title":"The Space Between Us","url":"https://hdfull.org/pelicula/the-space-between-us","category":"Películas vistas","genre":"Romance","notes":"","createdAt":92},{"id":"mv-0093","title":"Spoiled Brats","url":"https://hdfull.org/pelicula/spoiled-brats","category":"Películas vistas","genre":"Comedia","notes":"","createdAt":93},{"id":"mv-0094","title":"We Bought a Zoo","url":"https://hdfull.org/pelicula/we-bought-a-zoo","category":"Películas vistas","genre":"Drama","notes":"","createdAt":94},{"id":"mv-0095","title":"The Hundred-Foot Journey","url":"https://hdfull.org/pelicula/the-hundred-foot-journey","category":"Películas vistas","genre":"Drama","notes":"","createdAt":95},{"id":"mv-0096","title":"Larry Crowne","url":"https://hdfull.org/pelicula/larry-crowne","category":"Películas vistas","genre":"Comedia","notes":"","createdAt":96},{"id":"mv-0097","title":"The Intouchables","url":"https://hdfull.org/pelicula/the-intouchables","category":"Películas vistas","genre":"Drama","notes":"","createdAt":97},{"id":"mv-0098","title":"The Family Man","url":"https://hdfull.org/pelicula/the-family-man","category":"Películas vistas","genre":"Drama","notes":"","createdAt":98},{"id":"mv-0099","title":"The Terminal","url":"https://hdfull.org/pelicula/the-terminal","category":"Películas vistas","genre":"Drama","notes":"","createdAt":99},{"id":"mv-0100","title":"A Perfect Pairing","url":"https://hdfull.org/pelicula/a-perfect-pairing","category":"Películas vistas","genre":"Romance","notes":"","createdAt":100},{"id":"mv-0101","title":"Falling Inn Love","url":"https://hdfull.org/pelicula/falling-inn-love","category":"Películas vistas","genre":"Romance","notes":"","createdAt":101},{"id":"mv-0102","title":"Four to Dinner","url":"https://hdfull.org/pelicula/four-to-dinner","category":"Películas vistas","genre":"Comedia","notes":"","createdAt":102},{"id":"mv-0103","title":"Regretting You","url":"https://hdfull.org/pelicula/regretting-you","category":"Películas vistas","genre":"Drama","notes":"","createdAt":103},{"id":"mv-0104","title":"Prom Pact","url":"https://hdfull.org/pelicula/prom-pact","category":"Películas vistas","genre":"Comedia","notes":"","createdAt":104},{"id":"mv-0105","title":"Scouts Guide to the Zombie Apocalypse","url":"https://hdfull.org/pelicula/scouts-guide-to-the-zombie-apocalypse","category":"Películas vistas","genre":"Terror","notes":"","createdAt":105},{"id":"mv-0106","title":"Chicken Little","url":"https://hdfull.org/pelicula/chicken-little","category":"Películas vistas","genre":"Animación","notes":"","createdAt":106},{"id":"mv-0107","title":"Arthur 3: The War of the Two Worlds","url":"https://hdfull.org/pelicula/arthur-3-the-war-of-the-two-worlds","category":"Películas vistas","genre":"Animación","notes":"","createdAt":107},{"id":"mv-0108","title":"Arthur and the Invisibles","url":"https://hdfull.org/pelicula/arthur-and-the-invisibles","category":"Películas vistas","genre":"Animación","notes":"","createdAt":108},{"id":"mv-0109","title":"The Painted Veil","url":"https://hdfull.org/pelicula/the-painted-veil","category":"Películas vistas","genre":"Drama","notes":"","createdAt":109},{"id":"mv-0110","title":"Toc Toc","url":"https://hdfull.org/pelicula/toc-toc","category":"Películas vistas","genre":"Comedia","notes":"","createdAt":110},{"id":"mv-0111","title":"Night Teeth","url":"https://hdfull.org/pelicula/night-teeth","category":"Películas vistas","genre":"Terror","notes":"","createdAt":111},{"id":"mv-0112","title":"Planes","url":"https://hdfull.org/pelicula/planes","category":"Películas vistas","genre":"Animación","notes":"","createdAt":112},{"id":"mv-0113","title":"Bad Boys","url":"https://hdfull.org/pelicula/bad-boys","category":"Películas vistas","genre":"Acción","notes":"","createdAt":113},{"id":"mv-0114","title":"Blue Streak","url":"https://hdfull.org/pelicula/blue-streak","category":"Películas vistas","genre":"Comedia","notes":"","createdAt":114},{"id":"mv-0115","title":"Predator: Badlands","url":"https://hdfull.org/pelicula/predator-badlands","category":"Películas vistas","genre":"Ciencia ficción","notes":"","createdAt":115},{"id":"mv-0116","title":"Tracers","url":"https://hdfull.org/pelicula/tracers","category":"Películas vistas","genre":"Acción","notes":"","createdAt":116},{"id":"mv-0117","title":"Ransom","url":"https://hdfull.org/pelicula/ransom","category":"Películas vistas","genre":"Thriller","notes":"","createdAt":117},{"id":"mv-0118","title":"Cradle 2 the Grave","url":"https://hdfull.org/pelicula/cradle-2-the-grave","category":"Películas vistas","genre":"Acción","notes":"","createdAt":118},{"id":"mv-0119","title":"DC League of Super-Pets","url":"https://hdfull.org/pelicula/dc-league-of-super-pets","category":"Películas vistas","genre":"Animación","notes":"","createdAt":119},{"id":"mv-0120","title":"Dead in a Week (Or Your Money Back)","url":"https://hdfull.org/pelicula/dead-in-a-week-or-your-money-back","category":"Películas vistas","genre":"Comedia","notes":"","createdAt":120},{"id":"mv-0121","title":"Air Bud: Golden Receiver","url":"https://hdfull.org/pelicula/air-bud-golden-receiver","category":"Películas vistas","genre":"Familiar","notes":"","createdAt":121},{"id":"mv-0122","title":"Air Bud","url":"https://hdfull.org/pelicula/air-bud","category":"Películas vistas","genre":"Familiar","notes":"","createdAt":122},{"id":"mv-0123","title":"Trouble with the Curve","url":"https://hdfull.org/pelicula/trouble-with-the-curve","category":"Películas vistas","genre":"Drama","notes":"","createdAt":123},{"id":"mv-0124","title":"Like Mike","url":"https://hdfull.org/pelicula/like-mike","category":"Películas vistas","genre":"Comedia","notes":"","createdAt":124},{"id":"mv-0125","title":"The Rookie (2002)","url":"https://hdfull.org/pelicula/the-rookie-2002","category":"Películas vistas","genre":"Drama","notes":"","createdAt":125},{"id":"mv-0126","title":"Goosebumps","url":"https://hdfull.org/pelicula/goosebumps","category":"Películas vistas","genre":"Aventura","notes":"","createdAt":126},{"id":"mv-0127","title":"The Next Karate Kid","url":"https://hdfull.org/pelicula/the-next-karate-kid","category":"Películas vistas","genre":"Acción","notes":"","createdAt":127},{"id":"mv-0128","title":"The Karate Kid Part III","url":"https://hdfull.org/pelicula/the-karate-kid-part-iii","category":"Películas vistas","genre":"Acción","notes":"","createdAt":128},{"id":"mv-0129","title":"The Karate Kid Part II","url":"https://hdfull.org/pelicula/the-karate-kid-part-ii","category":"Películas vistas","genre":"Acción","notes":"","createdAt":129},{"id":"mv-0130","title":"The Karate Kid","url":"https://hdfull.org/pelicula/the-karate-kid","category":"Películas vistas","genre":"Acción","notes":"","createdAt":130},{"id":"mv-0131","title":"Aladdin","url":"https://hdfull.org/pelicula/aladdin","category":"Películas vistas","genre":"Animación","notes":"","createdAt":131},{"id":"mv-0132","title":"Hercules","url":"https://hdfull.org/pelicula/hercules","category":"Películas vistas","genre":"Animación","notes":"","createdAt":132},{"id":"mv-0133","title":"Tom and Jerry: The Movie","url":"https://hdfull.org/pelicula/tom-and-jerry-the-movie","category":"Películas vistas","genre":"Animación","notes":"","createdAt":133},{"id":"mv-0134","title":"Oliver & Company","url":"https://hdfull.org/pelicula/oliver-company","category":"Películas vistas","genre":"Animación","notes":"","createdAt":134},{"id":"mv-0135","title":"Ice Age: Collision Course","url":"https://hdfull.org/pelicula/ice-age-collision-course","category":"Películas vistas","genre":"Animación","notes":"","createdAt":135},{"id":"mv-0136","title":"Ice Age: Continental Drift","url":"https://hdfull.org/pelicula/ice-age-continental-drift","category":"Películas vistas","genre":"Animación","notes":"","createdAt":136},{"id":"mv-0137","title":"Ice Age: Dawn of the Dinosaurs","url":"https://hdfull.org/pelicula/ice-age-dawn-of-the-dinosaurs","category":"Películas vistas","genre":"Animación","notes":"","createdAt":137},{"id":"mv-0138","title":"Ice Age: The Meltdown","url":"https://hdfull.org/pelicula/ice-age-the-meltdown","category":"Películas vistas","genre":"Animación","notes":"","createdAt":138},{"id":"mv-0139","title":"Ice Age","url":"https://hdfull.org/pelicula/ice-age","category":"Películas vistas","genre":"Animación","notes":"","createdAt":139},{"id":"mv-0140","title":"The Lion King 2: Simba's Pride","url":"https://hdfull.org/pelicula/the-lion-king-2-simbas-pride","category":"Películas vistas","genre":"Animación","notes":"","createdAt":140},{"id":"mv-0141","title":"The Lion King","url":"https://hdfull.org/pelicula/the-lion-king","category":"Películas vistas","genre":"Animación","notes":"","createdAt":141},{"id":"mv-0142","title":"Finding Nemo","url":"https://hdfull.org/pelicula/finding-nemo","category":"Películas vistas","genre":"Animación","notes":"","createdAt":142},{"id":"mv-0143","title":"Playdate","url":"https://hdfull.org/pelicula/playdate","category":"Películas vistas","genre":"Comedia","notes":"","createdAt":143},{"id":"mv-0144","title":"Catch Me If You Can","url":"https://hdfull.org/pelicula/catch-me-if-you-can","category":"Películas vistas","genre":"Drama","notes":"","createdAt":144},{"id":"mv-0145","title":"Now You See Me","url":"https://hdfull.org/pelicula/now-you-see-me","category":"Películas vistas","genre":"Thriller","notes":"","createdAt":145},{"id":"mv-0146","title":"Life as We Know It","url":"https://hdfull.org/pelicula/life-as-we-know-it","category":"Películas vistas","genre":"Romance","notes":"","createdAt":146},{"id":"mv-0147","title":"Accepted","url":"https://hdfull.org/pelicula/accepted","category":"Películas vistas","genre":"Comedia","notes":"","createdAt":147},{"id":"mv-0148","title":"Avatar","url":"https://hdfull.org/pelicula/avatar","category":"Películas vistas","genre":"Ciencia ficción","notes":"","createdAt":148},{"id":"mv-0149","title":"Zoom","url":"https://hdfull.org/pelicula/zoom","category":"Películas vistas","genre":"Aventura","notes":"","createdAt":149},{"id":"mv-0150","title":"The Knight Before Christmas","url":"https://hdfull.org/pelicula/the-knight-before-christmas","category":"Películas vistas","genre":"Romance","notes":"","createdAt":150},{"id":"mv-0151","title":"Never Back Down","url":"https://hdfull.org/pelicula/never-back-down","category":"Películas vistas","genre":"Acción","notes":"","createdAt":151},{"id":"mv-0152","title":"Renfield","url":"https://hdfull.org/pelicula/renfield","category":"Películas vistas","genre":"Terror","notes":"","createdAt":152},{"id":"mv-0153","title":"Zombieland","url":"https://hdfull.org/pelicula/zombieland","category":"Películas vistas","genre":"Terror","notes":"","createdAt":153},{"id":"mv-0154","title":"Next","url":"https://hdfull.org/pelicula/next","category":"Películas vistas","genre":"Ciencia ficción","notes":"","createdAt":154},{"id":"mv-0155","title":"M3GAN 2.0","url":"https://hdfull.org/pelicula/m3gan-20","category":"Películas vistas","genre":"Terror","notes":"","createdAt":155},{"id":"mv-0156","title":"Recipe for Love","url":"https://hdfull.org/pelicula/recipe-for-love","category":"Películas vistas","genre":"Romance","notes":"","createdAt":156},{"id":"mv-0157","title":"Jennifer's Body","url":"https://hdfull.org/pelicula/jennifers-body","category":"Películas vistas","genre":"Terror","notes":"","createdAt":157},{"id":"mv-0158","title":"Casper: A Spirited Beginning","url":"https://hdfull.org/pelicula/casper-a-spirited-beginning","category":"Películas vistas","genre":"Familiar","notes":"","createdAt":158},{"id":"mv-0159","title":"Nimona","url":"https://hdfull.org/pelicula/nimona","category":"Películas vistas","genre":"Animación","notes":"","createdAt":159},{"id":"mv-0160","title":"Ruby Gillman, Teenage Kraken","url":"https://hdfull.org/pelicula/ruby-gillman-teenage-kraken","category":"Películas vistas","genre":"Animación","notes":"","createdAt":160},{"id":"mv-0161","title":"KPop Demon Hunters","url":"https://hdfull.org/pelicula/kpop-demon-hunters","category":"Películas vistas","genre":"Animación","notes":"","createdAt":161},{"id":"mv-0162","title":"The Rebound","url":"https://hdfull.org/pelicula/the-rebound","category":"Películas vistas","genre":"Romance","notes":"","createdAt":162},{"id":"mv-0163","title":"The Family Plan","url":"https://hdfull.org/pelicula/the-family-plan","category":"Películas vistas","genre":"Acción","notes":"","createdAt":163},{"id":"mv-0164","title":"Back in Action","url":"https://hdfull.org/pelicula/back-in-action","category":"Películas vistas","genre":"Acción","notes":"","createdAt":164},{"id":"mv-0165","title":"Big Stan","url":"https://hdfull.org/pelicula/big-stan","category":"Películas vistas","genre":"Comedia","notes":"","createdAt":165},{"id":"mv-0166","title":"Beethoven's 2nd","url":"https://hdfull.org/pelicula/beethovens-2nd","category":"Películas vistas","genre":"Familiar","notes":"","createdAt":166},{"id":"mv-0167","title":"Beethoven","url":"https://hdfull.org/pelicula/beethoven","category":"Películas vistas","genre":"Familiar","notes":"","createdAt":167},{"id":"mv-0168","title":"The Parent Trap (1998)","url":"https://hdfull.org/pelicula/the-parent-trap-1998","category":"Películas vistas","genre":"Familiar","notes":"","createdAt":168},{"id":"mv-0169","title":"Yours, Mine & Ours","url":"https://hdfull.org/pelicula/yours-mine-and-ours","category":"Películas vistas","genre":"Comedia","notes":"","createdAt":169},{"id":"mv-0170","title":"Family Switch","url":"https://hdfull.org/pelicula/family-switch","category":"Películas vistas","genre":"Comedia","notes":"","createdAt":170},{"id":"mv-0171","title":"The War with Grandpa","url":"https://hdfull.org/pelicula/the-war-with-grandpa","category":"Películas vistas","genre":"Comedia","notes":"","createdAt":171},{"id":"mv-0172","title":"I, Frankenstein","url":"https://hdfull.org/pelicula/i-frankenstein","category":"Películas vistas","genre":"Acción","notes":"","createdAt":172},{"id":"mv-0173","title":"Freaky","url":"https://hdfull.org/pelicula/freaky","category":"Películas vistas","genre":"Terror","notes":"","createdAt":173},{"id":"mv-0174","title":"The Adam Project","url":"https://hdfull.org/pelicula/the-adam-project","category":"Películas vistas","genre":"Ciencia ficción","notes":"","createdAt":174},{"id":"mv-0175","title":"Love Guaranteed","url":"https://hdfull.org/pelicula/love-guaranteed","category":"Películas vistas","genre":"Romance","notes":"","createdAt":175},{"id":"mv-0176","title":"Love and Sunshine","url":"https://hdfull.org/pelicula/love-and-sunshine","category":"Películas vistas","genre":"Romance","notes":"","createdAt":176},{"id":"mv-0177","title":"Falling for Christmas","url":"https://hdfull.org/pelicula/falling-for-christmas","category":"Películas vistas","genre":"Romance","notes":"","createdAt":177},{"id":"mv-0178","title":"Warm Bodies","url":"https://hdfull.org/pelicula/warm-bodies","category":"Películas vistas","genre":"Romance","notes":"","createdAt":178},{"id":"mv-0179","title":"Forgetting Sarah Marshall","url":"https://hdfull.org/pelicula/forgetting-sarah-marshall","category":"Películas vistas","genre":"Comedia","notes":"","createdAt":179},{"id":"mv-0180","title":"Leap Year","url":"https://hdfull.org/pelicula/leap-year","category":"Películas vistas","genre":"Romance","notes":"","createdAt":180},{"id":"mv-0181","title":"Just My Luck","url":"https://hdfull.org/pelicula/just-my-luck","category":"Películas vistas","genre":"Romance","notes":"","createdAt":181},{"id":"mv-0182","title":"Two Weeks Notice","url":"https://hdfull.org/pelicula/two-weeks-notice","category":"Películas vistas","genre":"Romance","notes":"","createdAt":182},{"id":"mv-0183","title":"Abigail (2024)","url":"https://hdfull.org/pelicula/abigail-2024","category":"Películas vistas","genre":"Terror","notes":"","createdAt":183},{"id":"mv-0184","title":"Blue Beetle","url":"https://hdfull.org/pelicula/blue-beetle","category":"Películas vistas","genre":"Acción","notes":"","createdAt":184},{"id":"mv-0185","title":"Samaritan","url":"https://hdfull.org/pelicula/samaritan","category":"Películas vistas","genre":"Acción","notes":"","createdAt":185},{"id":"mv-0186","title":"Boy Kills World","url":"https://hdfull.org/pelicula/boy-kills-world","category":"Películas vistas","genre":"Acción","notes":"","createdAt":186},{"id":"mv-0187","title":"Unleashed","url":"https://hdfull.org/pelicula/unleashed","category":"Películas vistas","genre":"Acción","notes":"","createdAt":187},{"id":"mv-0188","title":"Nobody","url":"https://hdfull.org/pelicula/nobody","category":"Películas vistas","genre":"Acción","notes":"","createdAt":188},{"id":"mv-0189","title":"Ashby","url":"https://hdfull.org/pelicula/ashby","category":"Películas vistas","genre":"Comedia","notes":"","createdAt":189},{"id":"mv-0190","title":"Holidate","url":"https://hdfull.org/pelicula/holidate","category":"Películas vistas","genre":"Romance","notes":"","createdAt":190},{"id":"mv-0191","title":"Little Italy","url":"https://hdfull.org/pelicula/little-italy","category":"Películas vistas","genre":"Romance","notes":"","createdAt":191},{"id":"mv-0192","title":"About Fate","url":"https://hdfull.org/pelicula/about-fate","category":"Películas vistas","genre":"Romance","notes":"","createdAt":192},{"id":"mv-0193","title":"Stuck in Love","url":"https://hdfull.org/pelicula/stuck-in-love","category":"Películas vistas","genre":"Romance","notes":"","createdAt":193},{"id":"mv-0194","title":"Float (2024)","url":"https://hdfull.org/pelicula/float-2024","category":"Películas vistas","genre":"Romance","notes":"","createdAt":194},{"id":"mv-0195","title":"A Working Man","url":"https://hdfull.org/pelicula/a-working-man","category":"Películas vistas","genre":"Acción","notes":"","createdAt":195},{"id":"mv-0196","title":"Black Adam","url":"https://hdfull.org/pelicula/black-adam","category":"Películas vistas","genre":"Acción","notes":"","createdAt":196},{"id":"mv-0197","title":"RoboCop (2014)","url":"https://hdfull.org/pelicula/robocop-2014","category":"Películas vistas","genre":"Acción","notes":"","createdAt":197},{"id":"mv-0198","title":"Violent Night","url":"https://hdfull.org/pelicula/violent-night","category":"Películas vistas","genre":"Acción","notes":"","createdAt":198},{"id":"mv-0199","title":"American Ultra","url":"https://hdfull.org/pelicula/american-ultra","category":"Películas vistas","genre":"Acción","notes":"","createdAt":199},{"id":"mv-0200","title":"The Spy Who Dumped Me","url":"https://hdfull.org/pelicula/the-spy-who-dumped-me","category":"Películas vistas","genre":"Comedia","notes":"","createdAt":200},{"id":"mv-0201","title":"Casino Royale","url":"https://hdfull.org/pelicula/casino-royale","category":"Películas vistas","genre":"Acción","notes":"","createdAt":201},{"id":"mv-0202","title":"Megalodon","url":"https://hdfull.org/pelicula/megalodon","category":"Películas vistas","genre":"Terror","notes":"","createdAt":202},{"id":"mv-0203","title":"Groundhog Day","url":"https://hdfull.org/pelicula/groundhog-day","category":"Películas vistas","genre":"Comedia","notes":"","createdAt":203},{"id":"mv-0204","title":"12 Dates of Christmas","url":"https://hdfull.org/pelicula/12-dates-of-christmas","category":"Películas vistas","genre":"Romance","notes":"","createdAt":204},{"id":"mv-0205","title":"She's Out of My League","url":"https://hdfull.org/pelicula/shes-out-of-my-league","category":"Películas vistas","genre":"Comedia","notes":"","createdAt":205},{"id":"mv-0206","title":"Mike and Dave Need Wedding Dates","url":"https://hdfull.org/pelicula/mike-dave-need-wedding-dates","category":"Películas vistas","genre":"Comedia","notes":"","createdAt":206},{"id":"mv-0207","title":"Palm Springs","url":"https://hdfull.org/pelicula/palm-springs","category":"Películas vistas","genre":"Comedia","notes":"","createdAt":207},{"id":"mv-0208","title":"Novocaine","url":"https://hdfull.org/pelicula/novocaine","category":"Películas vistas","genre":"Acción","notes":"","createdAt":208},{"id":"mv-0209","title":"We're the Millers","url":"https://hdfull.org/pelicula/were-the-millers","category":"Películas vistas","genre":"Comedia","notes":"","createdAt":209},{"id":"mv-0210","title":"M3GAN","url":"https://hdfull.org/pelicula/m3gan","category":"Películas vistas","genre":"Terror","notes":"","createdAt":210},{"id":"mv-0211","title":"Automata","url":"https://hdfull.org/pelicula/automata","category":"Películas vistas","genre":"Ciencia ficción","notes":"","createdAt":211},{"id":"mv-0212","title":"Simulant","url":"https://hdfull.org/pelicula/simulant","category":"Películas vistas","genre":"Ciencia ficción","notes":"","createdAt":212},{"id":"mv-0213","title":"Archive","url":"https://hdfull.org/pelicula/archive","category":"Películas vistas","genre":"Ciencia ficción","notes":"","createdAt":213},{"id":"mv-0214","title":"Superman/Shazam!: The Return of Black Adam","url":"https://hdfull.org/pelicula/superman-shazam-the-return-of-black-adam","category":"Películas vistas","genre":"Animación","notes":"","createdAt":214},{"id":"mv-0215","title":"Superman vs. The Elite","url":"https://hdfull.org/pelicula/superman-vs-the-elite","category":"Películas vistas","genre":"Animación","notes":"","createdAt":215},{"id":"mv-0216","title":"Chef","url":"https://hdfull.org/pelicula/chef","category":"Películas vistas","genre":"Comedia","notes":"","createdAt":216},{"id":"mv-0217","title":"Hot Pursuit","url":"https://hdfull.org/pelicula/hot-pursuit","category":"Películas vistas","genre":"Comedia","notes":"","createdAt":217},{"id":"mv-0218","title":"Legally Blonde","url":"https://hdfull.org/pelicula/legally-blonde","category":"Películas vistas","genre":"Comedia","notes":"","createdAt":218},{"id":"mv-0219","title":"Beauty & the Briefcase","url":"https://hdfull.org/pelicula/beauty-the-briefcase","category":"Películas vistas","genre":"Romance","notes":"","createdAt":219},{"id":"mv-0220","title":"The DUFF","url":"https://hdfull.org/pelicula/the-duff","category":"Películas vistas","genre":"Comedia","notes":"","createdAt":220},{"id":"mv-0221","title":"Big Fat Liar","url":"https://hdfull.org/pelicula/big-fat-liar","category":"Películas vistas","genre":"Comedia","notes":"","createdAt":221},{"id":"mv-0222","title":"Love & Other Drugs","url":"https://hdfull.org/pelicula/love-other-drugs","category":"Películas vistas","genre":"Romance","notes":"","createdAt":222},{"id":"mv-0223","title":"Ted","url":"https://hdfull.org/pelicula/ted","category":"Películas vistas","genre":"Comedia","notes":"","createdAt":223},{"id":"mv-0224","title":"Ted 2","url":"https://hdfull.org/pelicula/ted-2","category":"Películas vistas","genre":"Comedia","notes":"","createdAt":224},{"id":"mv-0225","title":"The Gorge","url":"https://hdfull.org/pelicula/the-gorge","category":"Películas vistas","genre":"Acción","notes":"","createdAt":225},{"id":"mv-0226","title":"King Arthur: Legend of the Sword","url":"https://hdfull.org/pelicula/king-arthur-legend-of-the-sword","category":"Películas vistas","genre":"Aventura","notes":"","createdAt":226},{"id":"mv-0227","title":"Set It Up","url":"https://hdfull.org/pelicula/set-it-up","category":"Películas vistas","genre":"Romance","notes":"","createdAt":227},{"id":"mv-0228","title":"Love Hard","url":"https://hdfull.org/pelicula/love-hard","category":"Películas vistas","genre":"Romance","notes":"","createdAt":228},{"id":"mv-0229","title":"Gods of Egypt","url":"https://hdfull.org/pelicula/gods-of-egypt","category":"Películas vistas","genre":"Aventura","notes":"","createdAt":229},{"id":"mv-0230","title":"What's Your Number?","url":"https://hdfull.org/pelicula/whats-your-number","category":"Películas vistas","genre":"Comedia","notes":"","createdAt":230},{"id":"mv-0231","title":"Prince of Persia: The Sands of Time","url":"https://hdfull.org/pelicula/prince-of-persia-the-sands-of-time","category":"Películas vistas","genre":"Aventura","notes":"","createdAt":231},{"id":"mv-0232","title":"The Tourist","url":"https://hdfull.org/pelicula/the-tourist","category":"Películas vistas","genre":"Thriller","notes":"","createdAt":232},{"id":"mv-0233","title":"Lara Croft Tomb Raider: The Cradle of Life","url":"https://hdfull.org/pelicula/lara-croft-tomb-raider-the-cradle-of-life","category":"Películas vistas","genre":"Acción","notes":"","createdAt":233},{"id":"mv-0234","title":"Lara Croft: Tomb Raider","url":"https://hdfull.org/pelicula/lara-croft-tomb-raider","category":"Películas vistas","genre":"Acción","notes":"","createdAt":234},{"id":"mv-0235","title":"Wimbledon","url":"https://hdfull.org/pelicula/wimbledon","category":"Películas vistas","genre":"Romance","notes":"","createdAt":235},{"id":"mv-0236","title":"The Island","url":"https://hdfull.org/pelicula/the-island","category":"Películas vistas","genre":"Ciencia ficción","notes":"","createdAt":236},{"id":"mv-0237","title":"The Switch","url":"https://hdfull.org/pelicula/the-switch","category":"Películas vistas","genre":"Comedia","notes":"","createdAt":237},{"id":"mv-0238","title":"Love, Rosie","url":"https://hdfull.org/pelicula/love-rosie","category":"Películas vistas","genre":"Romance","notes":"","createdAt":238},{"id":"mv-0239","title":"Eddie's Million Dollar Cook-Off","url":"https://hdfull.org/pelicula/eddies-million-dollar-cook-off","category":"Películas vistas","genre":"Familiar","notes":"","createdAt":239},{"id":"mv-0240","title":"Fools Rush In","url":"https://hdfull.org/pelicula/fools-rush-in","category":"Películas vistas","genre":"Romance","notes":"","createdAt":240},{"id":"mv-0241","title":"Love Divided","url":"https://hdfull.org/pelicula/love-divided","category":"Películas vistas","genre":"Drama","notes":"","createdAt":241},{"id":"mv-0242","title":"Brother Bear 2","url":"https://hdfull.org/pelicula/brother-bear-2","category":"Películas vistas","genre":"Animación","notes":"","createdAt":242},{"id":"mv-0243","title":"Brother Bear","url":"https://hdfull.org/pelicula/brother-bear","category":"Películas vistas","genre":"Animación","notes":"","createdAt":243},{"id":"mv-0244","title":"Space Jam: A New Legacy","url":"https://hdfull.org/pelicula/space-jam-a-new-legacy","category":"Películas vistas","genre":"Animación","notes":"","createdAt":244},{"id":"mv-0245","title":"Space Jam","url":"https://hdfull.org/pelicula/space-jam","category":"Películas vistas","genre":"Animación","notes":"","createdAt":245},{"id":"mv-0246","title":"Robinson Crusoe","url":"https://hdfull.org/pelicula/robinson-crusoe","category":"Películas vistas","genre":"Animación","notes":"","createdAt":246},{"id":"mv-0247","title":"Spies in Disguise","url":"https://hdfull.org/pelicula/spies-in-disguise","category":"Películas vistas","genre":"Animación","notes":"","createdAt":247},{"id":"mv-0248","title":"The Idea of You","url":"https://hdfull.org/pelicula/the-idea-of-you","category":"Películas vistas","genre":"Romance","notes":"","createdAt":248},{"id":"mv-0249","title":"Knight and Day","url":"https://hdfull.org/pelicula/knight-and-day","category":"Películas vistas","genre":"Acción","notes":"","createdAt":249},{"id":"mv-0250","title":"What Happens in Vegas","url":"https://hdfull.org/pelicula/what-happens-in-vegas","category":"Películas vistas","genre":"Comedia","notes":"","createdAt":250},{"id":"mv-0251","title":"To All the Boys I've Loved Before","url":"https://hdfull.org/pelicula/to-all-the-boys-ive-loved-before","category":"Películas vistas","genre":"Romance","notes":"","createdAt":251},{"id":"mv-0252","title":"Geek Charming","url":"https://hdfull.org/pelicula/geek-charming","category":"Películas vistas","genre":"Romance","notes":"","createdAt":252},{"id":"mv-0253","title":"The Mask","url":"https://hdfull.org/pelicula/the-mask","category":"Películas vistas","genre":"Comedia","notes":"","createdAt":253},{"id":"mv-0254","title":"Kraven the Hunter","url":"https://hdfull.org/pelicula/kraven-the-hunter","category":"Películas vistas","genre":"Acción","notes":"","createdAt":254},{"id":"mv-0255","title":"Underdog","url":"https://hdfull.org/pelicula/underdog","category":"Películas vistas","genre":"Familiar","notes":"","createdAt":255},{"id":"mv-0256","title":"Kung Fu Panda 3","url":"https://hdfull.org/pelicula/kung-fu-panda-3","category":"Películas vistas","genre":"Animación","notes":"","createdAt":256},{"id":"mv-0257","title":"Kung Fu Panda 4","url":"https://hdfull.org/pelicula/kung-fu-panda-4","category":"Películas vistas","genre":"Animación","notes":"","createdAt":257},{"id":"mv-0258","title":"Tangled","url":"https://hdfull.org/pelicula/tangled","category":"Películas vistas","genre":"Animación","notes":"","createdAt":258},{"id":"mv-0259","title":"Meet the Robinsons","url":"https://hdfull.org/pelicula/meet-the-robinsons","category":"Películas vistas","genre":"Animación","notes":"","createdAt":259},{"id":"mv-0260","title":"Frozen in Love","url":"https://hdfull.org/pelicula/frozen-in-love","category":"Películas vistas","genre":"Romance","notes":"","createdAt":260},{"id":"mv-0261","title":"Fireheart","url":"https://hdfull.org/pelicula/fireheart","category":"Películas vistas","genre":"Animación","notes":"","createdAt":261},{"id":"mv-0262","title":"Ant-Man and the Wasp: Quantumania","url":"https://hdfull.org/pelicula/ant-man-and-the-wasp-quantumania","category":"Películas vistas","genre":"Acción","notes":"","createdAt":262},{"id":"mv-0263","title":"Ant-Man and the Wasp","url":"https://hdfull.org/pelicula/ant-man-and-the-wasp","category":"Películas vistas","genre":"Acción","notes":"","createdAt":263},{"id":"mv-0264","title":"Ant-Man","url":"https://hdfull.org/pelicula/ant-man","category":"Películas vistas","genre":"Acción","notes":"","createdAt":264},{"id":"mv-0265","title":"Stardust","url":"https://hdfull.org/pelicula/stardust","category":"Películas vistas","genre":"Fantasía","notes":"","createdAt":265},{"id":"mv-0266","title":"The Incredibles","url":"https://hdfull.org/pelicula/the-incredibles","category":"Películas vistas","genre":"Animación","notes":"","createdAt":266},{"id":"mv-0267","title":"Gangster Squad","url":"https://hdfull.org/pelicula/gangster-squad","category":"Películas vistas","genre":"Crimen","notes":"","createdAt":267},{"id":"mv-0268","title":"The School for Good and Evil","url":"https://hdfull.org/pelicula/the-school-for-good-and-evil","category":"Películas vistas","genre":"Fantasía","notes":"","createdAt":268},{"id":"mv-0269","title":"Sky High","url":"https://hdfull.org/pelicula/sky-high","category":"Películas vistas","genre":"Aventura","notes":"","createdAt":269},{"id":"mv-0270","title":"The Hating Game","url":"https://hdfull.org/pelicula/the-hating-game","category":"Películas vistas","genre":"Romance","notes":"","createdAt":270},{"id":"mv-0271","title":"Robots","url":"https://hdfull.org/pelicula/robots","category":"Películas vistas","genre":"Animación","notes":"","createdAt":271},{"id":"mv-0272","title":"This Is Where I Leave You","url":"https://hdfull.org/pelicula/this-is-where-i-leave-you","category":"Películas vistas","genre":"Comedia","notes":"","createdAt":272},{"id":"mv-0273","title":"The Accountant","url":"https://hdfull.org/pelicula/the-accountant","category":"Películas vistas","genre":"Acción","notes":"","createdAt":273},{"id":"mv-0274","title":"Gone Girl","url":"https://hdfull.org/pelicula/gone-girl","category":"Películas vistas","genre":"Thriller","notes":"","createdAt":274},{"id":"mv-0275","title":"Firebreather","url":"https://hdfull.org/pelicula/firebreather","category":"Películas vistas","genre":"Animación","notes":"","createdAt":275},{"id":"mv-0276","title":"The Amazing Spider-Man","url":"https://hdfull.org/pelicula/the-amazing-spider-man","category":"Películas vistas","genre":"Acción","notes":"","createdAt":276},{"id":"mv-0277","title":"Pacific Rim: Uprising","url":"https://hdfull.org/pelicula/pacific-rim-uprising","category":"Películas vistas","genre":"Ciencia ficción","notes":"","createdAt":277},{"id":"mv-0278","title":"Pacific Rim","url":"https://hdfull.org/pelicula/pacific-rim","category":"Películas vistas","genre":"Ciencia ficción","notes":"","createdAt":278},{"id":"mv-0279","title":"Ride Along","url":"https://hdfull.org/pelicula/ride-along","category":"Películas vistas","genre":"Comedia","notes":"","createdAt":279},{"id":"mv-0280","title":"Parker","url":"https://hdfull.org/pelicula/parker","category":"Películas vistas","genre":"Acción","notes":"","createdAt":280},{"id":"mv-0281","title":"The Accidental Husband","url":"https://hdfull.org/pelicula/the-accidental-husband","category":"Películas vistas","genre":"Romance","notes":"","createdAt":281},{"id":"mv-0282","title":"Death Race","url":"https://hdfull.org/pelicula/death-race","category":"Películas vistas","genre":"Acción","notes":"","createdAt":282},{"id":"mv-0283","title":"Jonah Hex","url":"https://hdfull.org/pelicula/jonah-hex","category":"Películas vistas","genre":"Acción","notes":"","createdAt":283},{"id":"mv-0284","title":"Drive Angry","url":"https://hdfull.org/pelicula/drive-angry","category":"Películas vistas","genre":"Acción","notes":"","createdAt":284},{"id":"mv-0285","title":"Enola Holmes","url":"https://hdfull.org/pelicula/enola-holmes","category":"Películas vistas","genre":"Misterio","notes":"","createdAt":285},{"id":"mv-0286","title":"The Holiday","url":"https://hdfull.org/pelicula/the-holiday","category":"Películas vistas","genre":"Romance","notes":"","createdAt":286},{"id":"mv-0287","title":"Brick Mansions","url":"https://hdfull.org/pelicula/brick-mansions","category":"Películas vistas","genre":"Acción","notes":"","createdAt":287},{"id":"mv-0288","title":"No Strings Attached","url":"https://hdfull.org/pelicula/no-strings-attached","category":"Películas vistas","genre":"Romance","notes":"","createdAt":288},{"id":"mv-0289","title":"One Small Hitch","url":"https://hdfull.org/pelicula/one-small-hitch","category":"Películas vistas","genre":"Romance","notes":"","createdAt":289},{"id":"mv-0290","title":"The Union","url":"https://hdfull.org/pelicula/the-union","category":"Películas vistas","genre":"Acción","notes":"","createdAt":290},{"id":"mv-0291","title":"Heartbreak Ridge","url":"https://hdfull.org/pelicula/heartbreak-ridge","category":"Películas vistas","genre":"Bélica","notes":"","createdAt":291},{"id":"mv-0292","title":"Alexander and the Terrible, Horrible, No Good, Very Bad Day","url":"https://hdfull.org/pelicula/alexander-and-the-terrible-horrible-no-good-very-b","category":"Películas vistas","genre":"Comedia","notes":"","createdAt":292},{"id":"mv-0293","title":"Mr. Deeds","url":"https://hdfull.org/pelicula/mr-deeds","category":"Películas vistas","genre":"Comedia","notes":"","createdAt":293},{"id":"mv-0294","title":"50 First Dates","url":"https://hdfull.org/pelicula/50-first-dates","category":"Películas vistas","genre":"Romance","notes":"","createdAt":294},{"id":"mv-0295","title":"The Game Plan","url":"https://hdfull.org/pelicula/the-game-plan","category":"Películas vistas","genre":"Comedia","notes":"","createdAt":295},{"id":"mv-0296","title":"Serving Sara","url":"https://hdfull.org/pelicula/serving-sara","category":"Películas vistas","genre":"Comedia","notes":"","createdAt":296},{"id":"mv-0297","title":"Paul Blart: Mall Cop","url":"https://hdfull.org/pelicula/paul-blart-mall-cop","category":"Películas vistas","genre":"Comedia","notes":"","createdAt":297},{"id":"mv-0298","title":"The Pacifier","url":"https://hdfull.org/pelicula/the-pacifier","category":"Películas vistas","genre":"Comedia","notes":"","createdAt":298},{"id":"mv-0299","title":"The Spy Next Door","url":"https://hdfull.org/pelicula/the-spy-next-door","category":"Películas vistas","genre":"Comedia","notes":"","createdAt":299},{"id":"mv-0300","title":"No Reservations","url":"https://hdfull.org/pelicula/no-reservations","category":"Películas vistas","genre":"Romance","notes":"","createdAt":300},{"id":"mv-0301","title":"Just Like Heaven","url":"https://hdfull.org/pelicula/just-like-heaven","category":"Películas vistas","genre":"Romance","notes":"","createdAt":301},{"id":"mv-0302","title":"Kate & Leopold","url":"https://hdfull.org/pelicula/kate-leopold","category":"Películas vistas","genre":"Romance","notes":"","createdAt":302},{"id":"mv-0303","title":"Sundays at Tiffany's","url":"https://hdfull.org/pelicula/sundays-at-tiffanys","category":"Películas vistas","genre":"Romance","notes":"","createdAt":303},{"id":"mv-0304","title":"The Lucky One","url":"https://hdfull.org/pelicula/the-lucky-one","category":"Películas vistas","genre":"Romance","notes":"","createdAt":304},{"id":"mv-0305","title":"The Ugly Truth","url":"https://hdfull.org/pelicula/the-ugly-truth","category":"Películas vistas","genre":"Romance","notes":"","createdAt":305},{"id":"mv-0306","title":"The Other Zoey","url":"https://hdfull.org/pelicula/the-other-zoey","category":"Películas vistas","genre":"Romance","notes":"","createdAt":306},{"id":"mv-0307","title":"Olympus Has Fallen","url":"https://hdfull.org/pelicula/olympus-has-fallen","category":"Películas vistas","genre":"Acción","notes":"","createdAt":307},{"id":"mv-0308","title":"London Has Fallen","url":"https://hdfull.org/pelicula/london-has-fallen","category":"Películas vistas","genre":"Acción","notes":"","createdAt":308},{"id":"mv-0309","title":"Angel Has Fallen","url":"https://hdfull.org/pelicula/angel-has-fallen","category":"Películas vistas","genre":"Acción","notes":"","createdAt":309},{"id":"mv-0310","title":"Delivery Man","url":"https://hdfull.org/pelicula/delivery-man","category":"Películas vistas","genre":"Comedia","notes":"","createdAt":310},{"id":"mv-0311","title":"A Family Affair","url":"https://hdfull.org/pelicula/a-family-affair","category":"Películas vistas","genre":"Romance","notes":"","createdAt":311},{"id":"mv-0312","title":"Anger Management","url":"https://hdfull.org/pelicula/anger-management","category":"Películas vistas","genre":"Comedia","notes":"","createdAt":312},{"id":"mv-0313","title":"Blended","url":"https://hdfull.org/pelicula/blended","category":"Películas vistas","genre":"Comedia","notes":"","createdAt":313},{"id":"mv-0314","title":"This Is the End","url":"https://hdfull.org/pelicula/this-is-the-end","category":"Películas vistas","genre":"Comedia","notes":"","createdAt":314},{"id":"mv-0315","title":"The Last Stand","url":"https://hdfull.org/pelicula/the-last-stand","category":"Películas vistas","genre":"Acción","notes":"","createdAt":315},{"id":"mv-0316","title":"The Last Boy Scout","url":"https://hdfull.org/pelicula/the-last-boy-scout","category":"Películas vistas","genre":"Acción","notes":"","createdAt":316},{"id":"mv-0317","title":"Stuber","url":"https://hdfull.org/pelicula/stuber","category":"Películas vistas","genre":"Comedia","notes":"","createdAt":317},{"id":"mv-0318","title":"Man on Fire","url":"https://hdfull.org/pelicula/man-on-fire","category":"Películas vistas","genre":"Acción","notes":"","createdAt":318},{"id":"mv-0319","title":"Art of Love","url":"https://hdfull.org/pelicula/art-of-love","category":"Películas vistas","genre":"Romance","notes":"","createdAt":319},{"id":"mv-0320","title":"Death Wish","url":"https://hdfull.org/pelicula/death-wish","category":"Películas vistas","genre":"Acción","notes":"","createdAt":320},{"id":"mv-0321","title":"Freelance","url":"https://hdfull.org/pelicula/freelance","category":"Películas vistas","genre":"Acción","notes":"","createdAt":321},{"id":"mv-0322","title":"I, Robot","url":"https://hdfull.org/pelicula/i-robot","category":"Películas vistas","genre":"Ciencia ficción","notes":"","createdAt":322},{"id":"mv-0323","title":"Mrs. Winterbourne","url":"https://hdfull.org/pelicula/mrs-winterbourne","category":"Películas vistas","genre":"Romance","notes":"","createdAt":323},{"id":"mv-0324","title":"Pokémon: Zoroark: Master of Illusions","url":"https://pokemon-project.com/peliculas/zoroark-el-maestro-de-ilusiones","category":"Películas vistas","genre":"Animación","notes":"","createdAt":324},{"id":"mv-0325","title":"Pokémon: Lucario and the Mystery of Mew","url":"https://hdfull.org/pelicula/pokemon-lucario-and-the-mystery-of-mew","category":"Películas vistas","genre":"Animación","notes":"","createdAt":325},{"id":"mv-0326","title":"No Sleep 'Til Christmas","url":"https://hdfull.org/pelicula/no-sleep-til-christmas","category":"Películas vistas","genre":"Romance","notes":"","createdAt":326},{"id":"mv-0327","title":"The Mummy Returns","url":"https://hdfull.org/pelicula/the-mummy-returns","category":"Películas vistas","genre":"Aventura","notes":"","createdAt":327},{"id":"mv-0328","title":"The Mummy","url":"https://hdfull.org/pelicula/the-mummy","category":"Películas vistas","genre":"Aventura","notes":"","createdAt":328},{"id":"mv-0329","title":"Bedazzled","url":"https://hdfull.org/pelicula/bedazzled","category":"Películas vistas","genre":"Comedia","notes":"","createdAt":329},{"id":"mv-0330","title":"Inside Out","url":"https://hdfull.org/pelicula/inside-out","category":"Películas vistas","genre":"Animación","notes":"","createdAt":330},{"id":"mv-0331","title":"The Witch: Part 2. The Other One","url":"https://hdfull.org/pelicula/the-witch-part-2-the-other-one","category":"Películas vistas","genre":"Acción","notes":"","createdAt":331},{"id":"mv-0332","title":"The Witch: Part 1. The Subversion","url":"https://hdfull.org/pelicula/the-witch-part-1-the-subversion","category":"Películas vistas","genre":"Acción","notes":"","createdAt":332},{"id":"mv-0333","title":"Hansel & Gretel: Witch Hunters","url":"https://hdfull.org/pelicula/hansel-gretel-witch-hunters","category":"Películas vistas","genre":"Acción","notes":"","createdAt":333},{"id":"mv-0334","title":"Checkmates","url":"https://hdfull.org/pelicula/checkmates","category":"Películas vistas","genre":"Comedia","notes":"","createdAt":334},{"id":"mv-0335","title":"Alita: Battle Angel","url":"https://hdfull.org/pelicula/alita-battle-angel","category":"Películas vistas","genre":"Ciencia ficción","notes":"","createdAt":335},{"id":"mv-0336","title":"Doctor Dolittle (1998)","url":"https://hdfull.org/pelicula/doctor-dolittle-1998","category":"Películas vistas","genre":"Familiar","notes":"","createdAt":336},{"id":"mv-0337","title":"Matilda","url":"https://hdfull.org/pelicula/matilda","category":"Películas vistas","genre":"Familiar","notes":"","createdAt":337},{"id":"mv-0338","title":"Jumanji","url":"https://hdfull.org/pelicula/jumanji","category":"Películas vistas","genre":"Aventura","notes":"","createdAt":338},{"id":"mv-0339","title":"Atlas (2024)","url":"https://hdfull.org/pelicula/atlas-2024","category":"Películas vistas","genre":"Ciencia ficción","notes":"","createdAt":339},{"id":"mv-0340","title":"Turning Red","url":"https://hdfull.org/pelicula/turning-red","category":"Películas vistas","genre":"Animación","notes":"","createdAt":340},{"id":"mv-0341","title":"Elemental","url":"https://hdfull.org/pelicula/elemental","category":"Películas vistas","genre":"Animación","notes":"","createdAt":341},{"id":"mv-0342","title":"When We First Met","url":"https://hdfull.org/pelicula/when-we-first-met","category":"Películas vistas","genre":"Romance","notes":"","createdAt":342},{"id":"mv-0343","title":"It's a Boy Girl Thing","url":"https://hdfull.org/pelicula/its-a-boy-girl-thing","category":"Películas vistas","genre":"Comedia","notes":"","createdAt":343},{"id":"mv-0344","title":"Loser","url":"https://hdfull.org/pelicula/loser","category":"Películas vistas","genre":"Comedia","notes":"","createdAt":344},{"id":"mv-0345","title":"Trojan War","url":"https://hdfull.org/pelicula/trojan-war","category":"Películas vistas","genre":"Comedia","notes":"","createdAt":345},{"id":"mv-0346","title":"Freaks of Nature","url":"https://hdfull.org/pelicula/freaks-of-nature","category":"Películas vistas","genre":"Terror","notes":"","createdAt":346},{"id":"mv-0347","title":"RED","url":"https://hdfull.org/pelicula/red","category":"Películas vistas","genre":"Acción","notes":"","createdAt":347},{"id":"mv-0348","title":"Geostorm","url":"https://hdfull.org/pelicula/geostorm","category":"Películas vistas","genre":"Ciencia ficción","notes":"","createdAt":348},{"id":"mv-0349","title":"Walking Tall","url":"https://hdfull.org/pelicula/walking-tall","category":"Películas vistas","genre":"Acción","notes":"","createdAt":349},{"id":"mv-0350","title":"Planet Hulk","url":"https://hdfull.org/pelicula/planet-hulk","category":"Películas vistas","genre":"Animación","notes":"","createdAt":350},{"id":"mv-0351","title":"The Incredible Hulk","url":"https://hdfull.org/pelicula/the-incredible-hulk","category":"Películas vistas","genre":"Acción","notes":"","createdAt":351},{"id":"mv-0352","title":"Hulk vs.","url":"https://hdfull.org/pelicula/hulk-vs","category":"Películas vistas","genre":"Animación","notes":"","createdAt":352},{"id":"mv-0353","title":"Bloodshot","url":"https://hdfull.org/pelicula/bloodshot","category":"Películas vistas","genre":"Acción","notes":"","createdAt":353},{"id":"mv-0354","title":"Prey for the Devil","url":"https://hdfull.org/pelicula/prey-for-the-devil","category":"Películas vistas","genre":"Terror","notes":"","createdAt":354},{"id":"mv-0355","title":"The Croods: A New Age","url":"https://hdfull.org/pelicula/the-croods-a-new-age","category":"Películas vistas","genre":"Animación","notes":"","createdAt":355},{"id":"mv-0356","title":"Rio 2","url":"https://hdfull.org/pelicula/rio-2","category":"Películas vistas","genre":"Animación","notes":"","createdAt":356},{"id":"mv-0357","title":"Flushed Away","url":"https://hdfull.org/pelicula/flushed-away","category":"Películas vistas","genre":"Animación","notes":"","createdAt":357},{"id":"mv-0358","title":"Tarzan","url":"https://hdfull.org/pelicula/tarzan","category":"Películas vistas","genre":"Animación","notes":"","createdAt":358},{"id":"mv-0359","title":"Madagascar 3: Europe's Most Wanted","url":"https://hdfull.org/pelicula/madagascar-3-europes-most-wanted","category":"Películas vistas","genre":"Animación","notes":"","createdAt":359},{"id":"mv-0360","title":"Madagascar: Escape 2 Africa","url":"https://hdfull.org/pelicula/madagascar-escape-2-africa","category":"Películas vistas","genre":"Animación","notes":"","createdAt":360},{"id":"mv-0361","title":"Madagascar","url":"https://hdfull.org/pelicula/madagascar","category":"Películas vistas","genre":"Animación","notes":"","createdAt":361},{"id":"mv-0362","title":"G.I. Joe: The Rise of Cobra","url":"https://hdfull.org/pelicula/gi-joe-the-rise-of-cobra","category":"Películas vistas","genre":"Acción","notes":"","createdAt":362},{"id":"mv-0363","title":"Battleship","url":"https://hdfull.org/pelicula/battleship","category":"Películas vistas","genre":"Ciencia ficción","notes":"","createdAt":363},{"id":"mv-0364","title":"How to Train Your Dragon","url":"https://hdfull.org/pelicula/how-to-train-your-dragon","category":"Películas vistas","genre":"Animación","notes":"","createdAt":364},{"id":"mv-0365","title":"The Sea Beast","url":"https://hdfull.org/pelicula/the-sea-beast","category":"Películas vistas","genre":"Animación","notes":"","createdAt":365},{"id":"mv-0366","title":"Rumble (2021)","url":"https://hdfull.org/pelicula/rumble-2021","category":"Películas vistas","genre":"Animación","notes":"","createdAt":366},{"id":"mv-0367","title":"Bulletproof Monk","url":"https://hdfull.org/pelicula/bulletproof-monk","category":"Películas vistas","genre":"Acción","notes":"","createdAt":367},{"id":"mv-0368","title":"The Beekeeper","url":"https://hdfull.org/pelicula/the-beekeeper","category":"Películas vistas","genre":"Acción","notes":"","createdAt":368},{"id":"mv-0369","title":"Homefront","url":"https://hdfull.org/pelicula/homefront","category":"Películas vistas","genre":"Acción","notes":"","createdAt":369},{"id":"mv-0370","title":"Safe","url":"https://hdfull.org/pelicula/safe","category":"Películas vistas","genre":"Acción","notes":"","createdAt":370},{"id":"mv-0371","title":"Meg 2: The Trench","url":"https://hdfull.org/pelicula/meg-2-the-trench","category":"Películas vistas","genre":"Terror","notes":"","createdAt":371},{"id":"mv-0372","title":"The Meg","url":"https://hdfull.org/pelicula/the-meg","category":"Películas vistas","genre":"Terror","notes":"","createdAt":372},{"id":"mv-0373","title":"Rampage (2018)","url":"https://hdfull.org/pelicula/rampage-2018","category":"Películas vistas","genre":"Acción","notes":"","createdAt":373},{"id":"mv-0374","title":"Kong: Skull Island","url":"https://hdfull.org/pelicula/kong-skull-island","category":"Películas vistas","genre":"Aventura","notes":"","createdAt":374},{"id":"mv-0375","title":"Puppy Love","url":"https://hdfull.org/pelicula/puppy-love","category":"Películas vistas","genre":"Romance","notes":"","createdAt":375},{"id":"mv-0376","title":"Godzilla vs. Kong","url":"https://hdfull.org/pelicula/godzilla-vs-kong","category":"Películas vistas","genre":"Acción","notes":"","createdAt":376},{"id":"mv-0377","title":"Godzilla","url":"https://hdfull.org/pelicula/godzilla","category":"Películas vistas","genre":"Ciencia ficción","notes":"","createdAt":377},{"id":"mv-0378","title":"Mechanic: Resurrection","url":"https://hdfull.org/pelicula/mechanic-resurrection","category":"Películas vistas","genre":"Acción","notes":"","createdAt":378},{"id":"mv-0379","title":"Kim Possible: So the Drama","url":"https://hdfull.org/pelicula/kim-possible-so-the-drama","category":"Películas vistas","genre":"Animación","notes":"","createdAt":379},{"id":"mv-0380","title":"Suicide Squad","url":"https://hdfull.org/pelicula/suicide-squad","category":"Películas vistas","genre":"Acción","notes":"","createdAt":380},{"id":"mv-0381","title":"The Longest Ride","url":"https://hdfull.org/pelicula/the-longest-ride","category":"Películas vistas","genre":"Romance","notes":"","createdAt":381},{"id":"mv-0382","title":"A Good Day to Die Hard","url":"https://hdfull.org/pelicula/a-good-day-to-die-hard","category":"Películas vistas","genre":"Acción","notes":"","createdAt":382},{"id":"mv-0383","title":"Live Free or Die Hard","url":"https://hdfull.org/pelicula/live-free-or-die-hard","category":"Películas vistas","genre":"Acción","notes":"","createdAt":383},{"id":"mv-0384","title":"Die Hard with a Vengeance","url":"https://hdfull.org/pelicula/die-hard-with-a-vengeance","category":"Películas vistas","genre":"Acción","notes":"","createdAt":384},{"id":"mv-0385","title":"Die Hard 2","url":"https://hdfull.org/pelicula/die-hard-2","category":"Películas vistas","genre":"Acción","notes":"","createdAt":385},{"id":"mv-0386","title":"Die Hard","url":"https://hdfull.org/pelicula/die-hard","category":"Películas vistas","genre":"Acción","notes":"","createdAt":386},{"id":"mv-0387","title":"Security","url":"https://hdfull.org/pelicula/security","category":"Películas vistas","genre":"Acción","notes":"","createdAt":387},{"id":"mv-0388","title":"Day Shift","url":"https://hdfull.org/pelicula/day-shift","category":"Películas vistas","genre":"Acción","notes":"","createdAt":388},{"id":"mv-0389","title":"Jason Bourne","url":"https://hdfull.org/pelicula/jason-bourne","category":"Películas vistas","genre":"Acción","notes":"","createdAt":389},{"id":"mv-0390","title":"The Bourne Legacy","url":"https://hdfull.org/pelicula/the-bourne-legacy","category":"Películas vistas","genre":"Acción","notes":"","createdAt":390},{"id":"mv-0391","title":"The Bourne Ultimatum","url":"https://hdfull.org/pelicula/the-bourne-ultimatum","category":"Películas vistas","genre":"Acción","notes":"","createdAt":391},{"id":"mv-0392","title":"The Bourne Supremacy","url":"https://hdfull.org/pelicula/the-bourne-supremacy","category":"Películas vistas","genre":"Acción","notes":"","createdAt":392},{"id":"mv-0393","title":"The Bourne Identity","url":"https://hdfull.org/pelicula/the-bourne-identity","category":"Películas vistas","genre":"Acción","notes":"","createdAt":393},{"id":"mv-0394","title":"Argylle","url":"https://hdfull.org/pelicula/argylle","category":"Películas vistas","genre":"Acción","notes":"","createdAt":394},{"id":"mv-0395","title":"Road House (2024)","url":"https://hdfull.org/pelicula/road-house-2024","category":"Películas vistas","genre":"Acción","notes":"","createdAt":395},{"id":"mv-0396","title":"Overboard (2018)","url":"https://hdfull.org/pelicula/overboard-2018","category":"Películas vistas","genre":"Comedia","notes":"","createdAt":396},{"id":"mv-0397","title":"The Tuxedo","url":"https://hdfull.org/pelicula/the-tuxedo","category":"Películas vistas","genre":"Acción","notes":"","createdAt":397},{"id":"mv-0398","title":"The Tomorrow War","url":"https://hdfull.org/pelicula/the-tomorrow-war","category":"Películas vistas","genre":"Ciencia ficción","notes":"","createdAt":398},{"id":"mv-0399","title":"Back to the Future Part III","url":"https://hdfull.org/pelicula/back-to-the-future-part-iii","category":"Películas vistas","genre":"Ciencia ficción","notes":"","createdAt":399},{"id":"mv-0400","title":"Back to the Future Part II","url":"https://hdfull.org/pelicula/back-to-the-future-part-ii","category":"Películas vistas","genre":"Ciencia ficción","notes":"","createdAt":400},{"id":"mv-0401","title":"Back to the Future","url":"https://hdfull.org/pelicula/back-to-the-future","category":"Películas vistas","genre":"Ciencia ficción","notes":"","createdAt":401},{"id":"mv-0402","title":"Men in Black: International","url":"https://hdfull.org/pelicula/men-in-black-international","category":"Películas vistas","genre":"Ciencia ficción","notes":"","createdAt":402},{"id":"mv-0403","title":"Men in Black 3","url":"https://hdfull.org/pelicula/men-in-black-3","category":"Películas vistas","genre":"Ciencia ficción","notes":"","createdAt":403},{"id":"mv-0404","title":"Men in Black II","url":"https://hdfull.org/pelicula/men-in-black-ii","category":"Películas vistas","genre":"Ciencia ficción","notes":"","createdAt":404},{"id":"mv-0405","title":"Men in Black","url":"https://hdfull.org/pelicula/men-in-black","category":"Películas vistas","genre":"Ciencia ficción","notes":"","createdAt":405},{"id":"mv-0406","title":"Pitch Black","url":"https://hdfull.org/pelicula/pitch-black","category":"Películas vistas","genre":"Ciencia ficción","notes":"","createdAt":406},{"id":"mv-0407","title":"Over the Hedge","url":"https://hdfull.org/pelicula/over-the-hedge","category":"Películas vistas","genre":"Animación","notes":"","createdAt":407},{"id":"mv-0408","title":"The Mitchells vs. the Machines","url":"https://hdfull.org/pelicula/the-mitchells-vs-the-machines","category":"Películas vistas","genre":"Animación","notes":"","createdAt":408},{"id":"mv-0409","title":"Free Guy","url":"https://hdfull.org/pelicula/free-guy","category":"Películas vistas","genre":"Comedia","notes":"","createdAt":409},{"id":"mv-0410","title":"R.I.P.D.","url":"https://hdfull.org/pelicula/ripd","category":"Películas vistas","genre":"Acción","notes":"","createdAt":410},{"id":"mv-0411","title":"The Proposal","url":"https://hdfull.org/pelicula/the-proposal","category":"Películas vistas","genre":"Romance","notes":"","createdAt":411},{"id":"mv-0412","title":"The Change-Up","url":"https://hdfull.org/pelicula/the-change-up","category":"Películas vistas","genre":"Comedia","notes":"","createdAt":412},{"id":"mv-0413","title":"Definitely, Maybe","url":"https://hdfull.org/pelicula/definitely-maybe","category":"Películas vistas","genre":"Romance","notes":"","createdAt":413},{"id":"mv-0414","title":"Ghosted","url":"https://hdfull.org/pelicula/ghosted","category":"Películas vistas","genre":"Romance","notes":"","createdAt":414},{"id":"mv-0415","title":"The Bad Guys","url":"https://hdfull.org/pelicula/the-bad-guys","category":"Películas vistas","genre":"Animación","notes":"","createdAt":415},{"id":"mv-0416","title":"Zootopia","url":"https://hdfull.org/pelicula/zootopia","category":"Películas vistas","genre":"Animación","notes":"","createdAt":416},{"id":"mv-0417","title":"Mavka: The Forest Song","url":"https://hdfull.org/pelicula/mavka-the-forest-song","category":"Películas vistas","genre":"Animación","notes":"","createdAt":417},{"id":"mv-0418","title":"How I Became a Superhero","url":"https://hdfull.org/pelicula/how-i-became-a-superhero","category":"Películas vistas","genre":"Acción","notes":"","createdAt":418},{"id":"mv-0419","title":"Anyone but You","url":"https://hdfull.org/pelicula/anyone-but-you","category":"Películas vistas","genre":"Romance","notes":"","createdAt":419},{"id":"mv-0420","title":"RJ Decker","url":"https://hdfull.org/serie/rj-decker","category":"Series por ver","genre":"Drama","notes":"Estaba en carpeta de películas","createdAt":420},{"id":"mv-0421","title":"Outside Providence","url":"https://hdfull.org/pelicula/outside-providence","category":"Películas por ver","genre":"Comedia","notes":"","createdAt":421},{"id":"mv-0422","title":"The Sheep Detectives","url":"https://hdfull.org/pelicula/the-sheep-detectives","category":"Películas por ver","genre":"Animación","notes":"","createdAt":422},{"id":"mv-0423","title":"Outside the Wire","url":"https://hdfull.org/pelicula/outside-the-wire","category":"Películas por ver","genre":"Ciencia ficción","notes":"","createdAt":423},{"id":"mv-0424","title":"Love in Slow Motion","url":"https://hdfull.org/pelicula/love-in-slow-motion","category":"Películas por ver","genre":"Romance","notes":"","createdAt":424},{"id":"mv-0425","title":"Dust Bunny","url":"https://hdfull.org/pelicula/dust-bunny","category":"Películas por ver","genre":"Terror","notes":"","createdAt":425},{"id":"mv-0426","title":"Crime 101","url":"https://hdfull.org/pelicula/crime-101","category":"Películas por ver","genre":"Crimen","notes":"","createdAt":426},{"id":"mv-0427","title":"Playing for Keeps (2012)","url":"https://hdfull.org/pelicula/playing-for-keeps-2012","category":"Películas por ver","genre":"Romance","notes":"","createdAt":427},{"id":"mv-0428","title":"Heart Eyes","url":"https://hdfull.org/pelicula/heart-eyes","category":"Películas por ver","genre":"Terror","notes":"","createdAt":428},{"id":"mv-0429","title":"Jack the Giant Slayer","url":"https://hdfull.org/pelicula/jack-the-giant-slayer","category":"Películas por ver","genre":"Aventura","notes":"","createdAt":429},{"id":"mv-0430","title":"A Good Year","url":"https://hdfull.org/pelicula/a-good-year","category":"Películas por ver","genre":"Romance","notes":"","createdAt":430},{"id":"mv-0431","title":"Red Riding Hood","url":"https://hdfull.org/pelicula/red-riding-hood","category":"Películas por ver","genre":"Fantasía","notes":"","createdAt":431},{"id":"mv-0432","title":"People We Meet on Vacation","url":"https://hdfull.org/pelicula/people-we-meet-on-vacation","category":"Películas por ver","genre":"Romance","notes":"","createdAt":432},{"id":"mv-0433","title":"27 Dresses","url":"https://hdfull.org/pelicula/27-dresses","category":"Películas por ver","genre":"Romance","notes":"","createdAt":433},{"id":"mv-0434","title":"Sketch","url":"https://hdfull.org/pelicula/sketch","category":"Películas por ver","genre":"Fantasía","notes":"","createdAt":434},{"id":"mv-0435","title":"The Running Man (2025)","url":"https://hdfull.org/pelicula/the-running-man-2025","category":"Películas por ver","genre":"Ciencia ficción","notes":"","createdAt":435},{"id":"mv-0436","title":"Guns Up","url":"https://hdfull.org/pelicula/guns-up","category":"Películas por ver","genre":"Acción","notes":"","createdAt":436},{"id":"mv-0437","title":"My Cousin Vinny","url":"https://hdfull.org/pelicula/my-cousin-vinny","category":"Películas por ver","genre":"Comedia","notes":"","createdAt":437},{"id":"mv-0438","title":"Black Lotus","url":"https://hdfull.org/pelicula/black-lotus","category":"Películas por ver","genre":"Acción","notes":"","createdAt":438},{"id":"mv-0439","title":"The Truman Show","url":"https://hdfull.org/pelicula/the-truman-show","category":"Películas por ver","genre":"Drama","notes":"","createdAt":439},{"id":"mv-0440","title":"In the Lost Lands","url":"https://hdfull.org/pelicula/in-the-lost-lands","category":"Películas por ver","genre":"Fantasía","notes":"","createdAt":440},{"id":"mv-0441","title":"In the Sub for Love","url":"https://hdfull.org/pelicula/in-the-sub-for-love","category":"Películas por ver","genre":"Romance","notes":"","createdAt":441},{"id":"mv-0442","title":"Caramelo","url":"https://hdfull.org/pelicula/caramelo","category":"Películas por ver","genre":"Comedia","notes":"","createdAt":442},{"id":"mv-0443","title":"Caught Stealing","url":"https://hdfull.org/pelicula/caught-stealing","category":"Películas por ver","genre":"Crimen","notes":"","createdAt":443},{"id":"mv-0444","title":"The Roses","url":"https://hdfull.org/pelicula/the-roses","category":"Películas por ver","genre":"Comedia","notes":"","createdAt":444},{"id":"mv-0445","title":"Woodwalkers","url":"https://hdfull.org/pelicula/woodwalkers","category":"Películas por ver","genre":"Fantasía","notes":"","createdAt":445},{"id":"mv-0446","title":"The Emoji Movie","url":"https://hdfull.org/pelicula/the-emoji-movie","category":"Películas por ver","genre":"Animación","notes":"","createdAt":446},{"id":"mv-0447","title":"Garfield","url":"https://hdfull.org/pelicula/garfield","category":"Películas por ver","genre":"Animación","notes":"","createdAt":447},{"id":"mv-0448","title":"Love, Romance & Chocolate","url":"https://hdfull.org/pelicula/love-romance-chocolate","category":"Películas por ver","genre":"Romance","notes":"","createdAt":448},{"id":"mv-0449","title":"Almost Cops","url":"https://hdfull.org/pelicula/almost-cops","category":"Películas por ver","genre":"Comedia","notes":"","createdAt":449},{"id":"mv-0450","title":"Witless Protection","url":"https://hdfull.org/pelicula/witless-protection","category":"Películas por ver","genre":"Comedia","notes":"","createdAt":450},{"id":"mv-0451","title":"The Boy Who Cried Werewolf","url":"https://hdfull.org/pelicula/the-boy-who-cried-werewolf","category":"Películas por ver","genre":"Familiar","notes":"","createdAt":451},{"id":"mv-0452","title":"Disenchanted","url":"https://hdfull.org/pelicula/disenchanted","category":"Películas por ver","genre":"Musical","notes":"","createdAt":452},{"id":"mv-0453","title":"Fantastic Four (2005)","url":"https://hdfull.org/pelicula/fantastic-four-2005","category":"Películas por ver","genre":"Acción","notes":"","createdAt":453},{"id":"mv-0454","title":"Heads of State","url":"https://hdfull.org/pelicula/heads-of-state","category":"Películas por ver","genre":"Acción","notes":"","createdAt":454},{"id":"mv-0455","title":"Upgraded","url":"https://hdfull.org/pelicula/upgraded","category":"Películas por ver","genre":"Romance","notes":"","createdAt":455},{"id":"mv-0456","title":"Finding You","url":"https://hdfull.org/pelicula/finding-you","category":"Películas por ver","genre":"Romance","notes":"","createdAt":456},{"id":"mv-0457","title":"The Flight Before Christmas (2015)","url":"https://hdfull.org/pelicula/the-flight-before-christmas-2015","category":"Películas por ver","genre":"Romance","notes":"","createdAt":457},{"id":"mv-0458","title":"A Very Merry Mix-Up","url":"https://hdfull.org/pelicula/a-very-merry-mix-up","category":"Películas por ver","genre":"Romance","notes":"","createdAt":458},{"id":"mv-0459","title":"Crazy Lizard","url":"https://hdfull.org/pelicula/crazy-lizard","category":"Películas por ver","genre":"Comedia","notes":"","createdAt":459},{"id":"mv-0460","title":"Winter Spring Summer or Fall","url":"https://hdfull.org/pelicula/winter-spring-summer-or-fall","category":"Películas por ver","genre":"Romance","notes":"","createdAt":460},{"id":"mv-0461","title":"My Dead Friend Zoe","url":"https://hdfull.org/pelicula/my-dead-friend-zoe","category":"Películas por ver","genre":"Drama","notes":"","createdAt":461},{"id":"mv-0462","title":"Shadow Force","url":"https://hdfull.org/pelicula/shadow-force","category":"Películas por ver","genre":"Acción","notes":"","createdAt":462},{"id":"mv-0463","title":"Where the Heart Is","url":"https://hdfull.org/pelicula/where-the-heart-is","category":"Películas por ver","genre":"Drama","notes":"","createdAt":463},{"id":"mv-0464","title":"Alarum","url":"https://hdfull.org/pelicula/alarum","category":"Películas por ver","genre":"Acción","notes":"","createdAt":464},{"id":"mv-0465","title":"Fountain of Youth","url":"https://hdfull.org/pelicula/fountain-of-youth","category":"Películas por ver","genre":"Aventura","notes":"","createdAt":465},{"id":"mv-0466","title":"Yes Day","url":"https://hdfull.org/pelicula/yes-day","category":"Películas por ver","genre":"Comedia","notes":"","createdAt":466},{"id":"mv-0467","title":"A Minecraft Movie","url":"https://hdfull.org/pelicula/a-minecraft-movie","category":"Películas por ver","genre":"Aventura","notes":"","createdAt":467},{"id":"mv-0468","title":"The Wedding Planner","url":"https://hdfull.org/pelicula/the-wedding-planner","category":"Películas por ver","genre":"Romance","notes":"","createdAt":468},{"id":"mv-0469","title":"Mean Machine","url":"https://hdfull.org/pelicula/mean-machine","category":"Películas por ver","genre":"Drama","notes":"","createdAt":469},{"id":"mv-0470","title":"Happy Gilmore","url":"https://hdfull.org/pelicula/happy-gilmore","category":"Películas por ver","genre":"Comedia","notes":"","createdAt":470},{"id":"mv-0471","title":"The Electric State","url":"https://hdfull.org/pelicula/the-electric-state","category":"Películas por ver","genre":"Ciencia ficción","notes":"","createdAt":471},{"id":"mv-0472","title":"The Gangster, the Cop, the Devil","url":"https://hdfull.org/pelicula/the-gangster-the-cop-the-devil","category":"Películas por ver","genre":"Crimen","notes":"","createdAt":472},{"id":"mv-0473","title":"Turner & Hooch","url":"https://hdfull.org/pelicula/turner-hooch","category":"Películas por ver","genre":"Comedia","notes":"","createdAt":473},{"id":"mv-0474","title":"Cash Out","url":"https://hdfull.org/pelicula/cash-out","category":"Películas por ver","genre":"Acción","notes":"","createdAt":474},{"id":"mv-0475","title":"You're Cordially Invited","url":"https://hdfull.org/pelicula/youre-cordially-invited","category":"Películas por ver","genre":"Comedia","notes":"","createdAt":475},{"id":"mv-0476","title":"Babygirl (2024)","url":"https://hdfull.org/pelicula/babygirl-2024","category":"Películas por ver","genre":"Drama","notes":"","createdAt":476},{"id":"mv-0477","title":"Mesa de Regalos","url":"https://hdfull.org/pelicula/mesa-de-regalos","category":"Películas por ver","genre":"Comedia","notes":"","createdAt":477},{"id":"mv-0478","title":"Spellbound (2024)","url":"https://hdfull.org/pelicula/spellbound-2024","category":"Películas por ver","genre":"Animación","notes":"","createdAt":478},{"id":"mv-0479","title":"Which Brings Me to You","url":"https://hdfull.org/pelicula/which-brings-me-to-you","category":"Películas por ver","genre":"Romance","notes":"","createdAt":479},{"id":"mv-0480","title":"Army of Darkness","url":"https://hdfull.org/pelicula/army-of-darkness","category":"Películas por ver","genre":"Terror","notes":"","createdAt":480},{"id":"mv-0481","title":"Last Vegas","url":"https://hdfull.org/pelicula/last-vegas","category":"Películas por ver","genre":"Comedia","notes":"","createdAt":481},{"id":"mv-0482","title":"Office Space","url":"https://hdfull.org/pelicula/office-space","category":"Películas por ver","genre":"Comedia","notes":"","createdAt":482},{"id":"mv-0483","title":"Robot Overlords","url":"https://hdfull.org/pelicula/robot-overlords","category":"Películas por ver","genre":"Ciencia ficción","notes":"","createdAt":483},{"id":"mv-0484","title":"Cowboys & Aliens","url":"https://hdfull.org/pelicula/cowboys-aliens","category":"Películas por ver","genre":"Ciencia ficción","notes":"","createdAt":484},{"id":"mv-0485","title":"Wild Wild West","url":"https://hdfull.org/pelicula/wild-wild-west","category":"Películas por ver","genre":"Western","notes":"","createdAt":485},{"id":"mv-0486","title":"Abigail","url":"https://hdfull.org/pelicula/abigail","category":"Películas por ver","genre":"Terror","notes":"","createdAt":486},{"id":"mv-0487","title":"Hit Man","url":"https://hdfull.org/pelicula/hit-man","category":"Películas por ver","genre":"Comedia","notes":"","createdAt":487},{"id":"mv-0488","title":"Kingdom of the Planet of the Apes","url":"https://hdfull.org/pelicula/kingdom-of-the-planet-of-the-apes","category":"Películas por ver","genre":"Ciencia ficción","notes":"","createdAt":488},{"id":"mv-0489","title":"Como Dios Manda","url":"https://hdfull.org/pelicula/como-dios-manda","category":"Películas por ver","genre":"Comedia","notes":"","createdAt":489},{"id":"mv-0490","title":"Everyne Falls","url":"https://hdfull.org/pelicula/everyne-falls","category":"Películas por ver","genre":"Drama","notes":"Slug con posible typo en HDFull (¿Everyone Falls?)","createdAt":490},{"id":"mv-0491","title":"Vampiras: The Brides","url":"https://hdfull.org/pelicula/vampiras-the-brides","category":"Películas por ver","genre":"Terror","notes":"","createdAt":491},{"id":"mv-0492","title":"Shaft","url":"https://hdfull.org/pelicula/shaft","category":"Películas por ver","genre":"Acción","notes":"","createdAt":492},{"id":"mv-0493","title":"Dampyr","url":"https://hdfull.org/pelicula/dampyr","category":"Películas por ver","genre":"Terror","notes":"","createdAt":493},{"id":"mv-0494","title":"Viking Wolf","url":"https://hdfull.org/pelicula/viking-wolf","category":"Películas por ver","genre":"Terror","notes":"","createdAt":494},{"id":"mv-0495","title":"Plane","url":"https://hdfull.org/pelicula/plane","category":"Películas por ver","genre":"Acción","notes":"","createdAt":495},{"id":"mv-0496","title":"Gamer","url":"https://hdfull.org/pelicula/gamer","category":"Películas por ver","genre":"Ciencia ficción","notes":"","createdAt":496},{"id":"mv-0497","title":"Mercy (2023)","url":"https://hdfull.org/pelicula/mercy-2023","category":"Películas por ver","genre":"Acción","notes":"","createdAt":497},{"id":"mv-0498","title":"Upon the Magic Roads","url":"https://hdfull.org/pelicula/upon-the-magic-roads","category":"Películas por ver","genre":"Fantasía","notes":"","createdAt":498},{"id":"mv-0499","title":"Luck","url":"https://hdfull.org/pelicula/luck","category":"Películas por ver","genre":"Animación","notes":"","createdAt":499},{"id":"mv-0500","title":"Young Detective Dee: Rise of the Sea Dragon","url":"https://hdfull.org/pelicula/young-detective-dee-rise-of-the-sea-dragon","category":"Películas por ver","genre":"Acción","notes":"","createdAt":500},{"id":"mv-0501","title":"How to Survive Without Mum","url":"https://hdfull.org/pelicula/how-to-survive-without-mum","category":"Películas por ver","genre":"Comedia","notes":"","createdAt":501},{"id":"mv-0502","title":"Your Highness","url":"https://hdfull.org/pelicula/your-highness","category":"Películas por ver","genre":"Comedia","notes":"","createdAt":502},{"id":"mv-0503","title":"Mr. Monk's Last Case: A Monk Movie","url":"https://hdfull.org/pelicula/mr-monks-last-case-a-monk-movie","category":"Películas por ver","genre":"Misterio","notes":"","createdAt":503},{"id":"mv-0504","title":"Legend of the Fist: The Return of Chen Zhen","url":"https://hdfull.org/pelicula/legend-of-the-fist-the-return-of-chen-zhen","category":"Películas por ver","genre":"Acción","notes":"","createdAt":504},{"id":"mv-0505","title":"The Three Musketeers: Milady","url":"https://hdfull.org/pelicula/the-three-musketeers-milady","category":"Películas por ver","genre":"Aventura","notes":"","createdAt":505},{"id":"mv-0506","title":"Along with the Gods: The Two Worlds","url":"https://hdfull.org/pelicula/along-with-the-gods-the-two-worlds","category":"Películas por ver","genre":"Fantasía","notes":"","createdAt":506},{"id":"mv-0507","title":"Southpaw","url":"https://hdfull.org/pelicula/southpaw","category":"Películas por ver","genre":"Drama","notes":"","createdAt":507},{"id":"mv-0508","title":"Mamá o Papá","url":"https://hdfull.org/pelicula/mama-o-papa","category":"Películas por ver","genre":"Comedia","notes":"","createdAt":508},{"id":"mv-0509","title":"Wish","url":"https://hdfull.org/pelicula/wish","category":"Películas por ver","genre":"Animación","notes":"","createdAt":509},{"id":"mv-0510","title":"The Croods","url":"https://hdfull.org/pelicula/the-croods","category":"Películas por ver","genre":"Animación","notes":"","createdAt":510},{"id":"mv-0511","title":"Safe House","url":"https://hdfull.org/pelicula/safe-house","category":"Películas por ver","genre":"Acción","notes":"","createdAt":511},{"id":"mv-0512","title":"Cat Person","url":"https://hdfull.org/pelicula/cat-person","category":"Películas por ver","genre":"Thriller","notes":"","createdAt":512},{"id":"mv-0513","title":"Irish Wish","url":"https://hdfull.org/pelicula/irish-wish","category":"Películas por ver","genre":"Romance","notes":"","createdAt":513},{"id":"mv-0514","title":"Damsel (2024)","url":"https://hdfull.org/pelicula/damsel-2024","category":"Películas por ver","genre":"Fantasía","notes":"","createdAt":514},{"id":"mv-0515","title":"Code 8: Part II","url":"https://hdfull.org/pelicula/code-8-part-ii","category":"Películas por ver","genre":"Ciencia ficción","notes":"","createdAt":515},{"id":"mv-0516","title":"The Hollars","url":"https://hdfull.org/pelicula/the-hollars","category":"Películas por ver","genre":"Drama","notes":"","createdAt":516},{"id":"mv-0517","title":"The Illusionist","url":"https://hdfull.org/pelicula/the-illusionist","category":"Películas por ver","genre":"Misterio","notes":"","createdAt":517},{"id":"mv-0518","title":"Magic in the Moonlight","url":"https://hdfull.org/pelicula/magic-in-the-moonlight","category":"Películas por ver","genre":"Romance","notes":"","createdAt":518},{"id":"mv-0519","title":"Players","url":"https://hdfull.org/pelicula/players","category":"Películas por ver","genre":"Romance","notes":"","createdAt":519},{"id":"mv-0520","title":"The Last Legion","url":"https://hdfull.org/pelicula/the-last-legion","category":"Películas por ver","genre":"Aventura","notes":"","createdAt":520},{"id":"mv-0521","title":"Miller's Girl","url":"https://hdfull.org/pelicula/millers-girl","category":"Películas por ver","genre":"Drama","notes":"","createdAt":521},{"id":"mv-0522","title":"Notes on a Summer","url":"https://hdfull.org/pelicula/notes-on-a-summer","category":"Películas por ver","genre":"Drama","notes":"","createdAt":522},{"id":"mv-0523","title":"Past Lives","url":"https://hdfull.org/pelicula/past-lives","category":"Películas por ver","genre":"Romance","notes":"","createdAt":523},{"id":"mv-0524","title":"Inside Man (2023)","url":"https://hdfull.org/pelicula/inside-man-2023","category":"Películas por ver","genre":"Crimen","notes":"","createdAt":524},{"id":"mv-0525","title":"Mea Culpa (2024)","url":"https://hdfull.org/pelicula/mea-culpa-2024","category":"Películas por ver","genre":"Thriller","notes":"","createdAt":525},{"id":"mv-0526","title":"Heist 88","url":"https://hdfull.org/pelicula/heist-88","category":"Películas por ver","genre":"Crimen","notes":"","createdAt":526},{"id":"mv-0527","title":"The Gray Man","url":"https://hdfull.org/pelicula/the-gray-man","category":"Películas por ver","genre":"Acción","notes":"","createdAt":527},{"id":"mv-0528","title":"They Will Kill You","url":"https://hdfull.org/pelicula/they-will-kill-you","category":"Películas por ver","genre":"Terror","notes":"","createdAt":528},{"id":"sv-0001","title":"You Me Her","url":"https://hdfull.org/serie/you-me-her","category":"Series vistas","genre":"Romance","notes":"","createdAt":1001},{"id":"sv-0002","title":"Scorpion","url":"https://hdfull.org/serie/scorpion","category":"Series vistas","genre":"Acción","notes":"","createdAt":1002},{"id":"sv-0003","title":"Elle","url":"https://hdfull.org/serie/elle","category":"Series vistas","genre":"Drama","notes":"","createdAt":1003},{"id":"sv-0004","title":"Lie to Me","url":"https://hdfull.org/serie/lie-to-me","category":"Series vistas","genre":"Drama","notes":"","createdAt":1004},{"id":"sv-0005","title":"Marvel's Daredevil","url":"https://hdfull.org/serie/marvels-daredevil","category":"Series vistas","genre":"Acción","notes":"","createdAt":1005},{"id":"sv-0006","title":"Awkward","url":"https://hdfull.org/serie/awkward","category":"Series vistas","genre":"Comedia","notes":"","createdAt":1006},{"id":"sv-0007","title":"Loki","url":"https://hdfull.org/serie/loki","category":"Series vistas","genre":"Ciencia ficción","notes":"","createdAt":1007},{"id":"sv-0008","title":"Young Sherlock","url":"https://hdfull.org/serie/young-sherlock","category":"Series vistas","genre":"Misterio","notes":"Vista T1","createdAt":1008},{"id":"sv-0009","title":"Big Time Rush","url":"https://hdfull.org/serie/big-time-rush","category":"Series vistas","genre":"Comedia","notes":"","createdAt":1009},{"id":"sv-0010","title":"Nikita","url":"https://hdfull.org/serie/nikita","category":"Series vistas","genre":"Acción","notes":"","createdAt":1010},{"id":"sv-0011","title":"Vampirina","url":"https://hdfull.org/serie/vampirina-teenage-vampire","category":"Series vistas","genre":"Animación","notes":"","createdAt":1011},{"id":"sv-0012","title":"Cobra Kai","url":"https://hdfull.org/serie/cobra-kai","category":"Series vistas","genre":"Acción","notes":"","createdAt":1012},{"id":"sv-0013","title":"Creature Commandos","url":"https://hdfull.org/serie/creature-commandos","category":"Series vistas","genre":"Animación","notes":"","createdAt":1013},{"id":"sv-0014","title":"Young Sheldon","url":"https://hdfull.org/serie/young-sheldon","category":"Series vistas","genre":"Comedia","notes":"","createdAt":1014},{"id":"sv-0015","title":"Murderbot","url":"https://hdfull.org/serie/murderbot","category":"Series vistas","genre":"Ciencia ficción","notes":"","createdAt":1015},{"id":"sv-0016","title":"Hart of Dixie","url":"https://hdfull.org/serie/hart-of-dixie","category":"Series vistas","genre":"Drama","notes":"","createdAt":1016},{"id":"sv-0017","title":"You're the Worst","url":"https://hdfull.org/serie/youre-the-worst","category":"Series vistas","genre":"Comedia","notes":"","createdAt":1017},{"id":"sv-0018","title":"Alex Rider","url":"https://hdfull.org/serie/alex-rider","category":"Series vistas","genre":"Acción","notes":"","createdAt":1018},{"id":"sv-0019","title":"Whiskey Cavalier","url":"https://hdfull.org/serie/whiskey-cavalier","category":"Series vistas","genre":"Acción","notes":"Vista T1","createdAt":1019},{"id":"sv-0020","title":"Batman: The Brave and the Bold","url":"https://hdfull.org/serie/batman-the-brave-and-the-bold","category":"Series vistas","genre":"Animación","notes":"","createdAt":1020},{"id":"sv-0021","title":"The Batman","url":"https://hdfull.org/serie/the-batman","category":"Series vistas","genre":"Animación","notes":"","createdAt":1021},{"id":"sv-0022","title":"My Adventures with Superman","url":"https://hdfull.org/serie/my-adventures-with-superman","category":"Series vistas","genre":"Animación","notes":"","createdAt":1022},{"id":"sv-0023","title":"Invincible","url":"https://hdfull.org/serie/invincible","category":"Series vistas","genre":"Animación","notes":"","createdAt":1023},{"id":"sv-0024","title":"The Mentalist","url":"https://hdfull.org/serie/the-mentalist","category":"Series vistas","genre":"Crimen","notes":"","createdAt":1024},{"id":"sv-0025","title":"Ted Lasso","url":"https://hdfull.org/serie/ted-lasso","category":"Series vistas","genre":"Comedia","notes":"","createdAt":1025},{"id":"sv-0026","title":"Smallville","url":"https://hdfull.org/serie/smallville","category":"Series vistas","genre":"Ciencia ficción","notes":"","createdAt":1026},{"id":"sv-0027","title":"Ben 10: Alien Force","url":"https://hdfull.org/serie/ben-10-alien-force","category":"Series vistas","genre":"Animación","notes":"Vista T3","createdAt":1027},{"id":"sv-0028","title":"Ben 10 (2005)","url":"https://hdfull.org/serie/ben-10-2005","category":"Series vistas","genre":"Animación","notes":"Vista T4","createdAt":1028},{"id":"sv-0029","title":"iZombie","url":"https://hdfull.org/serie/izombie","category":"Series vistas","genre":"Comedia","notes":"Vista T5","createdAt":1029},{"id":"sv-0030","title":"FUBAR","url":"https://hdfull.org/serie/fubar","category":"Series vistas","genre":"Acción","notes":"Vista T1","createdAt":1030},{"id":"sv-0031","title":"Helstrom","url":"https://hdfull.org/serie/helstrom","category":"Series vistas","genre":"Terror","notes":"","createdAt":1031},{"id":"sv-0032","title":"Grimm","url":"https://hdfull.org/serie/grimm","category":"Series vistas","genre":"Fantasía","notes":"","createdAt":1032},{"id":"sv-0033","title":"Wednesday","url":"https://hdfull.org/serie/wednesday","category":"Series vistas","genre":"Comedia","notes":"Vista T1","createdAt":1033},{"id":"sv-0034","title":"Harley Quinn","url":"https://hdfull.org/serie/harley-quinn","category":"Series vistas","genre":"Animación","notes":"","createdAt":1034},{"id":"svp-0001","title":"Lanterns","url":"https://hdfull.org/serie/lanterns","category":"Series por ver","genre":"Ciencia ficción","notes":"","createdAt":2001},{"id":"svp-0002","title":"MobLand","url":"https://hdfull.org/serie/mobland","category":"Series por ver","genre":"Crimen","notes":"","createdAt":2002},{"id":"svp-0003","title":"The Final Problem","url":"https://hdfull.org/serie/the-final-problem","category":"Series por ver","genre":"Drama","notes":"","createdAt":2003},{"id":"svp-0004","title":"Sledge Hammer!","url":"https://hdfull.org/serie/sledge-hammer","category":"Series por ver","genre":"Comedia","notes":"","createdAt":2004},{"id":"svp-0005","title":"The Glades","url":"https://hdfull.org/serie/the-glades","category":"Series por ver","genre":"Crimen","notes":"En la lista: T1E12","createdAt":2005},{"id":"svp-0006","title":"Elsbeth","url":"https://hdfull.org/serie/elsbeth","category":"Series por ver","genre":"Crimen","notes":"En la lista: T1E9","createdAt":2006},{"id":"svp-0007","title":"The Neighborhood","url":"https://hdfull.org/serie/the-neighborhood","category":"Series por ver","genre":"Comedia","notes":"En la lista: T1E21 y T2E6","createdAt":2007},{"id":"svp-0008","title":"Jane the Virgin","url":"https://hdfull.org/serie/jane-the-virgin","category":"Series por ver","genre":"Comedia","notes":"En la lista: T1E11","createdAt":2008},{"id":"svp-0009","title":"Kevin Can Wait","url":"https://hdfull.org/serie/kevin-can-wait","category":"Series por ver","genre":"Comedia","notes":"","createdAt":2009},{"id":"svp-0010","title":"Knight Rider","url":"https://hdfull.org/serie/knight-rider","category":"Series por ver","genre":"Acción","notes":"","createdAt":2010},{"id":"svp-0011","title":"The New Adventures of Old Christine","url":"https://hdfull.org/serie/the-new-adventures-of-old-christine","category":"Series por ver","genre":"Comedia","notes":"","createdAt":2011},{"id":"svp-0012","title":"Morfeusz","url":"https://hdfull.org/serie/morfeusz","category":"Series por ver","genre":"Drama","notes":"","createdAt":2012},{"id":"svp-0013","title":"Off Campus","url":"https://hdfull.org/serie/off-campus","category":"Series por ver","genre":"Drama","notes":"","createdAt":2013},{"id":"svp-0014","title":"The Good Place","url":"https://hdfull.org/serie/the-good-place","category":"Series por ver","genre":"Comedia","notes":"","createdAt":2014},{"id":"svp-0015","title":"Ride or Die","url":"https://hdfull.org/serie/ride-or-die","category":"Series por ver","genre":"Drama","notes":"","createdAt":2015},{"id":"svp-0016","title":"Ugly Betty","url":"https://hdfull.org/serie/ugly-betty","category":"Series por ver","genre":"Comedia","notes":"","createdAt":2016},{"id":"svp-0017","title":"Ghosts","url":"https://hdfull.org/serie/ghosts","category":"Series por ver","genre":"Comedia","notes":"","createdAt":2017},{"id":"svp-0018","title":"The Diplomat","url":"https://hdfull.org/serie/the-diplomat","category":"Series por ver","genre":"Drama","notes":"","createdAt":2018},{"id":"svp-0019","title":"Lucky Luke (2026)","url":"https://hdfull.org/serie/lucky-luke-2026","category":"Series por ver","genre":"Western","notes":"En la lista: T1","createdAt":2019},{"id":"svp-0020","title":"La Brea","url":"https://hdfull.org/serie/la-brea","category":"Series por ver","genre":"Ciencia ficción","notes":"","createdAt":2020},{"id":"svp-0021","title":"Remington Steele","url":"https://hdfull.org/serie/remington-steele","category":"Series por ver","genre":"Misterio","notes":"","createdAt":2021},{"id":"svp-0022","title":"90210","url":"https://hdfull.org/serie/90210","category":"Series por ver","genre":"Drama","notes":"En la lista: T1E1","createdAt":2022},{"id":"svp-0023","title":"Wolf King","url":"https://hdfull.org/serie/wolf-king","category":"Series por ver","genre":"Fantasía","notes":"","createdAt":2023},{"id":"svp-0024","title":"Envidiosa","url":"https://hdfull.org/serie/envidiosa","category":"Series por ver","genre":"Comedia","notes":"","createdAt":2024},{"id":"svp-0025","title":"Margo's Got Money Troubles","url":"https://hdfull.org/serie/margos-got-money-troubles","category":"Series por ver","genre":"Comedia","notes":"","createdAt":2025},{"id":"svp-0026","title":"This Is Us","url":"https://hdfull.org/serie/this-is-us","category":"Series por ver","genre":"Drama","notes":"En la lista: T6","createdAt":2026},{"id":"svp-0027","title":"The Last Ship","url":"https://hdfull.org/serie/the-last-ship","category":"Series por ver","genre":"Ciencia ficción","notes":"","createdAt":2027},{"id":"svp-0028","title":"Justified","url":"https://hdfull.org/serie/justified","category":"Series por ver","genre":"Crimen","notes":"","createdAt":2028},{"id":"svp-0029","title":"Covert Affairs","url":"https://hdfull.org/serie/covert-affairs","category":"Series por ver","genre":"Acción","notes":"","createdAt":2029},{"id":"svp-0030","title":"Blindspot","url":"https://hdfull.org/serie/blindspot","category":"Series por ver","genre":"Crimen","notes":"","createdAt":2030},{"id":"svp-0031","title":"El Agente Nocturno","url":"https://series.ly/series/el-agente-nocturno","category":"Series por ver","genre":"Acción","notes":"Enlace externo (series.ly)","createdAt":2031},{"id":"svp-0032","title":"Melissa & Joey","url":"https://hdfull.org/serie/melissa-joey","category":"Series por ver","genre":"Comedia","notes":"","createdAt":2032},{"id":"svp-0033","title":"Sonny with a Chance","url":"https://hdfull.org/serie/sonny-with-a-chance","category":"Series por ver","genre":"Comedia","notes":"","createdAt":2033},{"id":"svp-0034","title":"Good Luck Charlie","url":"https://hdfull.org/serie/good-luck-charlie","category":"Series por ver","genre":"Comedia","notes":"","createdAt":2034},{"id":"svp-0035","title":"Jessie","url":"https://hdfull.org/serie/jessie","category":"Series por ver","genre":"Comedia","notes":"","createdAt":2035},{"id":"svp-0036","title":"The Dragon Prince","url":"https://hdfull.org/serie/the-dragon-prince","category":"Series por ver","genre":"Animación","notes":"","createdAt":2036},{"id":"svp-0037","title":"Marvel's Avengers Assemble","url":"https://hdfull.org/serie/marvels-avengers-assemble","category":"Series por ver","genre":"Animación","notes":"","createdAt":2037},{"id":"svp-0038","title":"Mike & Molly","url":"https://hdfull.org/serie/mike-and-molly","category":"Series por ver","genre":"Comedia","notes":"En la lista: T1E16","createdAt":2038},{"id":"svp-0039","title":"Tehran","url":"https://hdfull.org/serie/tehran","category":"Series por ver","genre":"Thriller","notes":"","createdAt":2039},{"id":"svp-0040","title":"24","url":"https://hdfull.org/serie/24","category":"Series por ver","genre":"Acción","notes":"","createdAt":2040},{"id":"svp-0041","title":"Lois & Clark","url":"https://hdfull.org/serie/lois-clark","category":"Series por ver","genre":"Ciencia ficción","notes":"En la lista: ficha + T1","createdAt":2041},{"id":"svp-0042","title":"You","url":"https://hdfull.org/serie/you","category":"Series por ver","genre":"Thriller","notes":"","createdAt":2042},{"id":"svp-0043","title":"Billy the Kid","url":"https://hdfull.org/serie/billy-the-kid","category":"Series por ver","genre":"Western","notes":"","createdAt":2043},{"id":"svp-0044","title":"Emily in Paris","url":"https://hdfull.org/serie/emily-in-paris","category":"Series por ver","genre":"Comedia","notes":"","createdAt":2044},{"id":"svp-0045","title":"White Collar","url":"https://hdfull.org/serie/white-collar","category":"Series por ver","genre":"Crimen","notes":"En la lista: T2E2","createdAt":2045},{"id":"svp-0046","title":"Todo el Mundo Odia a Chris","url":"https://hdfull.org/serie/todo-el-mundo-odia-a-chris","category":"Series por ver","genre":"Comedia","notes":"","createdAt":2046},{"id":"svp-0047","title":"Phil of the Future","url":"https://hdfull.org/serie/phil-of-the-future","category":"Series por ver","genre":"Comedia","notes":"","createdAt":2047},{"id":"svp-0048","title":"Obliterated","url":"https://hdfull.org/serie/obliterated","category":"Series por ver","genre":"Acción","notes":"","createdAt":2048},{"id":"svp-0049","title":"Hawaii Five-0","url":"https://hdfull.org/serie/hawaii-five-0","category":"Series por ver","genre":"Acción","notes":"En la lista: T2E10","createdAt":2049},{"id":"svp-0050","title":"The O.C.","url":"https://hdfull.org/serie/the-oc","category":"Series por ver","genre":"Drama","notes":"En la lista: T2E16","createdAt":2050},{"id":"svp-0051","title":"Numb3rs","url":"https://hdfull.org/serie/numb3rs","category":"Series por ver","genre":"Crimen","notes":"En la lista: T2E4","createdAt":2051},{"id":"svp-0052","title":"Unforgettable","url":"https://hdfull.org/serie/unforgettable","category":"Series por ver","genre":"Crimen","notes":"En la lista: T1E6","createdAt":2052},{"id":"svp-0053","title":"Chad Powers","url":"https://hdfull.org/serie/chad-powers","category":"Series por ver","genre":"Comedia","notes":"En la lista: T1E2","createdAt":2053},{"id":"svp-0054","title":"Slow Horses","url":"https://hdfull.org/serie/slow-horses","category":"Series por ver","genre":"Thriller","notes":"","createdAt":2054},{"id":"svp-0055","title":"Tulsa King","url":"https://hdfull.org/serie/tulsa-king","category":"Series por ver","genre":"Crimen","notes":"En la lista: T3E1","createdAt":2055},{"id":"svp-0056","title":"High Potential","url":"https://hdfull.org/serie/high-potential","category":"Series por ver","genre":"Crimen","notes":"En la lista: T1E8","createdAt":2056},{"id":"svp-0057","title":"Old Dog New Tricks","url":"https://hdfull.org/serie/old-dog-new-tricks","category":"Series por ver","genre":"Comedia","notes":"En la lista: T1E3","createdAt":2057},{"id":"svp-0058","title":"Kakuriyo no Yadomeshi","url":"https://www3.animeflv.net/anime/kakuriyo-no-yadomeshi","category":"Series por ver","genre":"Animación","notes":"Anime","createdAt":2058},{"id":"svp-0059","title":"Cross Ange: Tenshi to Ryuu no Rondo","url":"https://jkanime.net/cross-ange-tenshi-to-ryuu-no-rondo/","category":"Series por ver","genre":"Animación","notes":"Anime","createdAt":2059},{"id":"svp-0060","title":"Frasier","url":"https://hdfull.org/serie/frasier","category":"Series por ver","genre":"Comedia","notes":"","createdAt":2060},{"id":"svp-0061","title":"Gossip Girl","url":"https://hdfull.org/serie/gossip-girl","category":"Series por ver","genre":"Drama","notes":"","createdAt":2061},{"id":"svp-0062","title":"Manifest","url":"https://hdfull.org/serie/manifest","category":"Series por ver","genre":"Ciencia ficción","notes":"En la lista: T1E4","createdAt":2062},{"id":"svp-0063","title":"The Mick","url":"https://hdfull.org/serie/the-mick","category":"Series por ver","genre":"Comedia","notes":"","createdAt":2063},{"id":"svp-0064","title":"Gilmore Girls","url":"https://hdfull.org/serie/gilmore-girls","category":"Series por ver","genre":"Drama","notes":"En la lista: ficha + T1E7","createdAt":2064},{"id":"svp-0065","title":"Cougar Town","url":"https://hdfull.org/serie/cougar-town","category":"Series por ver","genre":"Comedia","notes":"En la lista: T2E19","createdAt":2065},{"id":"svp-0066","title":"Austin & Ally","url":"https://hdfull.org/serie/austin-ally","category":"Series por ver","genre":"Comedia","notes":"","createdAt":2066},{"id":"svp-0067","title":"Ally McBeal","url":"https://hdfull.org/serie/ally-mcbeal","category":"Series por ver","genre":"Drama","notes":"","createdAt":2067},{"id":"svp-0068","title":"Community","url":"https://hdfull.org/serie/community","category":"Series por ver","genre":"Comedia","notes":"","createdAt":2068},{"id":"svp-0069","title":"Con el Culo al Aire","url":"https://hdfull.org/serie/con-el-culo-al-aire","category":"Series por ver","genre":"Comedia","notes":"","createdAt":2069},{"id":"svp-0070","title":"Degrassi","url":"https://hdfull.org/serie/degrassi","category":"Series por ver","genre":"Drama","notes":"","createdAt":2070},{"id":"svp-0071","title":"Resident Alien","url":"https://hdfull.org/serie/resident-alien","category":"Series por ver","genre":"Ciencia ficción","notes":"","createdAt":2071},{"id":"svp-0072","title":"Life Sentence","url":"https://hdfull.org/serie/life-sentence","category":"Series por ver","genre":"Comedia","notes":"En la lista: T1","createdAt":2072},{"id":"svp-0073","title":"Good Cop Bad Cop (2025)","url":"https://hdfull.org/serie/good-cop-bad-cop-2025","category":"Series por ver","genre":"Crimen","notes":"","createdAt":2073},{"id":"svp-0074","title":"Running Point","url":"https://hdfull.org/serie/running-point","category":"Series por ver","genre":"Comedia","notes":"","createdAt":2074},{"id":"svp-0075","title":"Pequeñas Coincidencias","url":"https://hdfull.org/serie/pequenas-coincidencias","category":"Series por ver","genre":"Comedia","notes":"","createdAt":2075},{"id":"svp-0076","title":"Dark Matter","url":"https://hdfull.org/serie/dark-matter","category":"Series por ver","genre":"Ciencia ficción","notes":"","createdAt":2076},{"id":"svp-0077","title":"That '70s Show","url":"https://hdfull.org/serie/that-70s-show","category":"Series por ver","genre":"Comedia","notes":"","createdAt":2077},{"id":"svp-0078","title":"Cracow Monsters","url":"https://hdfull.org/serie/cracow-monsters","category":"Series por ver","genre":"Terror","notes":"","createdAt":2078},{"id":"svp-0079","title":"Shrinking","url":"https://hdfull.org/serie/shrinking","category":"Series por ver","genre":"Comedia","notes":"En la lista: T2E10","createdAt":2079},{"id":"svp-0080","title":"Professor T","url":"https://hdfull.org/serie/professor-t","category":"Series por ver","genre":"Crimen","notes":"","createdAt":2080},{"id":"svp-0081","title":"Frequency","url":"https://hdfull.org/serie/frequency","category":"Series por ver","genre":"Ciencia ficción","notes":"En la lista: T1","createdAt":2081},{"id":"svp-0082","title":"Wonder Woman","url":"https://hdfull.org/serie/wonder-woman","category":"Series por ver","genre":"Acción","notes":"","createdAt":2082},{"id":"svp-0083","title":"Devil May Cry (2025)","url":"https://hdfull.org/serie/devil-may-cry-2025","category":"Series por ver","genre":"Animación","notes":"En la lista: T1","createdAt":2083},{"id":"svp-0084","title":"Devil May Cry","url":"https://hdfull.org/serie/devil-may-cry","category":"Series por ver","genre":"Animación","notes":"","createdAt":2084},{"id":"svp-0085","title":"Boy Meets World","url":"https://hdfull.org/serie/boy-meets-world","category":"Series por ver","genre":"Comedia","notes":"En la lista: T7E14","createdAt":2085},{"id":"svp-0086","title":"Bones","url":"https://hdfull.org/serie/bones","category":"Series por ver","genre":"Crimen","notes":"En la lista: T7E8","createdAt":2086},{"id":"svp-0087","title":"Burn Notice","url":"https://hdfull.org/serie/burn-notice","category":"Series por ver","genre":"Acción","notes":"En la lista: T4E15","createdAt":2087},{"id":"svp-0088","title":"Sacred Seven","url":"https://www3.animeflv.net/anime/sacred-seven","category":"Series por ver","genre":"Animación","notes":"Anime","createdAt":2088},{"id":"svp-0089","title":"High Card","url":"https://www3.animeflv.net/ver/high-card-8","category":"Series por ver","genre":"Animación","notes":"Anime","createdAt":2089},{"id":"svp-0090","title":"Bounen no Xamdou","url":"https://www3.animeflv.net/anime/bounen-no-xamdou","category":"Series por ver","genre":"Animación","notes":"Anime","createdAt":2090},{"id":"svp-0091","title":"Looney Tunes Cartoons","url":"https://hdfull.org/serie/looney-tunes-cartoons","category":"Series por ver","genre":"Animación","notes":"En la lista: T1","createdAt":2091},{"id":"svp-0092","title":"Candice Renoir","url":"https://hdfull.org/serie/candice-renoir","category":"Series por ver","genre":"Crimen","notes":"","createdAt":2092},{"id":"svp-0093","title":"Tracker","url":"https://hdfull.org/serie/tracker","category":"Series por ver","genre":"Acción","notes":"","createdAt":2093},{"id":"svp-0094","title":"Wild Cards","url":"https://hdfull.org/serie/wild-cards","category":"Series por ver","genre":"Crimen","notes":"En la lista: T1","createdAt":2094},{"id":"svp-0095","title":"Drake & Josh","url":"https://hdfull.org/serie/drake-and-josh","category":"Series por ver","genre":"Comedia","notes":"","createdAt":2095},{"id":"svp-0096","title":"Revenge","url":"https://hdfull.org/serie/revenge","category":"Series por ver","genre":"Drama","notes":"","createdAt":2096},{"id":"svp-0097","title":"How I Met Your Mother","url":"https://hdfull.org/serie/how-i-met-your-mother","category":"Series por ver","genre":"Comedia","notes":"En la lista: T9","createdAt":2097},{"id":"svp-0098","title":"The Middle","url":"https://hdfull.org/serie/the-middle","category":"Series por ver","genre":"Comedia","notes":"","createdAt":2098},{"id":"svp-0099","title":"Sonic X","url":"https://ww3.animeonline.ninja/episodio/sonic-x-cap-5/","category":"Series por ver","genre":"Animación","notes":"Anime · En la lista: cap. 5","createdAt":2099},{"id":"svp-0100","title":"2 Broke Girls","url":"https://hdfull.org/serie/2-broke-girls","category":"Series por ver","genre":"Comedia","notes":"En la lista: ficha + T1E4","createdAt":2100},{"id":"svp-0101","title":"Kung Fu","url":"https://hdfull.org/serie/kung-fu","category":"Series por ver","genre":"Acción","notes":"","createdAt":2101},{"id":"svp-0102","title":"Legend of the Seeker","url":"https://hdfull.org/serie/legend-of-the-seeker","category":"Series por ver","genre":"Fantasía","notes":"En la lista: ficha + T2","createdAt":2102},{"id":"svp-0103","title":"Parks and Recreation","url":"https://hdfull.org/serie/parks-and-recreation","category":"Series por ver","genre":"Comedia","notes":"En la lista: T1E4","createdAt":2103},{"id":"svp-0104","title":"Scorpion","url":"https://hdfull.org/serie/scorpion","category":"Series por ver","genre":"Acción","notes":"En la lista: T4E18 · También en Series vistas","createdAt":2104},{"id":"svp-0105","title":"Suburgatory","url":"https://hdfull.org/serie/suburgatory","category":"Series por ver","genre":"Comedia","notes":"En la lista: ficha + T2E18","createdAt":2105},{"id":"svp-0106","title":"Los Increíbles Powell","url":"https://hdfull.org/serie/los-increibles-powell","category":"Series por ver","genre":"Comedia","notes":"En la lista: T1E6","createdAt":2106},{"id":"svp-0107","title":"The Listener","url":"https://hdfull.org/serie/the-listener","category":"Series por ver","genre":"Crimen","notes":"En la lista: T4E8","createdAt":2107},{"id":"svp-0108","title":"Lie to Me","url":"https://hdfull.org/serie/lie-to-me","category":"Series por ver","genre":"Drama","notes":"En la lista: T3E4 · También en Series vistas","createdAt":2108},{"id":"svp-0109","title":"New Girl","url":"https://hdfull.org/serie/new-girl","category":"Series por ver","genre":"Comedia","notes":"En la lista: T3E12","createdAt":2109},{"id":"svp-0110","title":"The Odd Couple","url":"https://hdfull.org/serie/the-odd-couple","category":"Series por ver","genre":"Comedia","notes":"En la lista: ficha + T1E4","createdAt":2110},{"id":"svp-0111","title":"Brandy & Mr. Whiskers","url":"https://playdede.eu/anime/brandy_y_mr_whiskers_618","category":"Series por ver","genre":"Animación","notes":"Anime","createdAt":2111},{"id":"svp-0112","title":"Malcolm in the Middle","url":"https://hdfull.org/serie/malcolm-in-the-middle","category":"Series por ver","genre":"Comedia","notes":"En la lista: T5E18","createdAt":2112},{"id":"svp-0113","title":"Death in Paradise","url":"https://hdfull.org/serie/death-in-paradise","category":"Series por ver","genre":"Crimen","notes":"En la lista: T1E5","createdAt":2113},{"id":"svp-0114","title":"Echo","url":"https://hdfull.org/serie/echo","category":"Series por ver","genre":"Acción","notes":"","createdAt":2114},{"id":"svp-0115","title":"Doctor Who (2024)","url":"https://hdfull.org/serie/doctor-who-2024","category":"Series por ver","genre":"Ciencia ficción","notes":"En la lista: T1","createdAt":2115},{"id":"svp-0116","title":"Glee","url":"https://hdfull.org/serie/glee","category":"Series por ver","genre":"Musical","notes":"","createdAt":2116},{"id":"svp-0117","title":"Barry","url":"https://hdfull.org/serie/barry","category":"Series por ver","genre":"Crimen","notes":"","createdAt":2117},{"id":"svp-0118","title":"Hannibal","url":"https://hdfull.org/serie/hannibal","category":"Series por ver","genre":"Thriller","notes":"En la lista: T1E3","createdAt":2118},{"id":"svp-0119","title":"See","url":"https://hdfull.org/serie/see","category":"Series por ver","genre":"Ciencia ficción","notes":"En la lista: T1","createdAt":2119},{"id":"svp-0120","title":"Scott Pilgrim Takes Off","url":"https://hdfull.org/serie/scott-pilgrim-takes-off","category":"Series por ver","genre":"Animación","notes":"","createdAt":2120},{"id":"svp-0121","title":"Slugterra","url":"https://hdfull.org/serie/slugterra","category":"Series por ver","genre":"Animación","notes":"","createdAt":2121},{"id":"svp-0122","title":"The Equalizer","url":"https://hdfull.org/serie/the-equalizer","category":"Series por ver","genre":"Acción","notes":"En la lista: T1","createdAt":2122},{"id":"svp-0123","title":"The Penguins of Madagascar","url":"https://hdfull.org/serie/the-penguins-of-madagascar","category":"Series por ver","genre":"Animación","notes":"En la lista: T1","createdAt":2123},{"id":"svp-0124","title":"DreamWorks Dragons","url":"https://hdfull.org/serie/dreamworks-dragons","category":"Series por ver","genre":"Animación","notes":"En la lista: T1","createdAt":2124},{"id":"svp-0125","title":"Knuckles","url":"https://hdfull.org/serie/knuckles","category":"Series por ver","genre":"Comedia","notes":"En la lista: T1","createdAt":2125},{"id":"svp-0126","title":"Last Man Standing","url":"https://hdfull.org/serie/last-man-standing","category":"Series por ver","genre":"Comedia","notes":"","createdAt":2126},{"id":"svp-0127","title":"Van Helsing (2016)","url":"https://hdfull.org/serie/van-helsing-2016","category":"Series por ver","genre":"Terror","notes":"En la lista: T1E7","createdAt":2127},{"id":"svp-0128","title":"Poker Face","url":"https://hdfull.org/serie/poker-face","category":"Series por ver","genre":"Crimen","notes":"En la lista: T1E3","createdAt":2128},{"id":"svp-0129","title":"Heirs of the Night","url":"https://hdfull.org/serie/heirs-of-the-night","category":"Series por ver","genre":"Fantasía","notes":"","createdAt":2129},{"id":"svp-0130","title":"School Spirits","url":"https://hdfull.org/serie/school-spirits","category":"Series por ver","genre":"Misterio","notes":"En la lista: T1","createdAt":2130},{"id":"svp-0131","title":"Kim Possible","url":"https://hdfull.org/serie/kim-possible","category":"Series por ver","genre":"Animación","notes":"","createdAt":2131},{"id":"svp-0132","title":"Teenage Bounty Hunters","url":"https://hdfull.org/serie/teenage-bounty-hunters","category":"Series por ver","genre":"Comedia","notes":"","createdAt":2132},{"id":"svp-0133","title":"Wakfu","url":"https://hdfull.org/serie/wakfu","category":"Series por ver","genre":"Animación","notes":"","createdAt":2133},{"id":"svp-0134","title":"The Thundermans","url":"https://hdfull.org/serie/the-thundermans","category":"Series por ver","genre":"Comedia","notes":"En la lista: T1","createdAt":2134},{"id":"svp-0135","title":"Outlander","url":"https://hdfull.org/serie/outlander","category":"Series por ver","genre":"Drama","notes":"","createdAt":2135},{"id":"svp-0136","title":"Into the Badlands","url":"https://hdfull.org/serie/into-the-badlands","category":"Series por ver","genre":"Acción","notes":"","createdAt":2136},{"id":"svp-0137","title":"Mr. & Mrs. Smith","url":"https://hdfull.org/serie/mr-mrs-smith","category":"Series por ver","genre":"Acción","notes":"En la lista: T1","createdAt":2137},{"id":"svp-0138","title":"The Artful Dodger","url":"https://hdfull.org/serie/the-artful-dodger","category":"Series por ver","genre":"Drama","notes":"","createdAt":2138},{"id":"a66cbfee-827c-4203-a0dc-8b1552c2a949","title":"El primer matrimonio de Georgie y Mandy","url":"https://hdfull.org/serie/georgie-mandys-first-marriage","category":"Series vistas","genre":"Comedia","notes":"","createdAt":1791481981564}]</script>
+
+<script>
+const CATEGORIES = [
+  'Películas vistas',
+  'Películas por ver',
+  'Series vistas',
+  'Series por ver'
+];
+const GENRES = [
+  'Acción','Aventura','Animación','Comedia','Crimen','Documental','Drama',
+  'Familiar','Fantasía','Historia','Musical','Misterio','Romance',
+  'Ciencia ficción','Thriller','Terror','Bélica','Western'
+];
+const STORAGE_KEY = 'bookmarks.v2';
+
+/* ---------------------------------------------------------------
+   Diccionario slug -> género (construido a partir de tus 700 fichas)
+   --------------------------------------------------------------- */
+const GENRE_MAP = {
+  "spider-man-brand-new-day":"Acción","the-love-hypothesis":"Romance","pixels":"Comedia",
+  "twisters":"Acción","moana-2026":"Animación","sterling-point":"Drama","brave":"Animación",
+  "moana--2":"Animación","moana":"Animación","coyote-vs-acme":"Animación",
+  "night-at-the-museum-secret-of-the-tomb":"Aventura",
+  "night-at-the-museum-battle-of-the-smithsonian":"Aventura",
+  "night-at-the-museum":"Aventura","nine-lives":"Comedia","toy-story-4":"Animación",
+  "toy-story-3":"Animación","toy-story-2":"Animación","toy-story":"Animación",
+  "toy-story-5":"Animación","the-legend-of-hei-2":"Animación","the-legend-of-hei":"Animación",
+  "captain-america-the-first-avenger":"Acción","superman-2025":"Acción","supergirl-2026":"Acción",
+  "monster-house":"Animación","office-romance":"Romance","a-tourists-guide-to-love":"Romance",
+  "cold-storage":"Thriller","masters-of-the-universe-2026":"Acción","shes-all-that":"Romance",
+  "hes-all-that":"Romance","totally-killer":"Terror","real-steel":"Acción",
+  "hotel-transylvania-2":"Animación","hotel-transylvania":"Animación","enola-holmes-2":"Misterio",
+  "enola-holmes-3":"Misterio","solo-mio":"Romance","passengers":"Ciencia ficción",
+  "voicemails-for-isabelle":"Romance","guardians-of-the-galaxy-vol-2":"Acción",
+  "guardians-of-the-galaxy":"Acción",
+  "birds-of-prey-and-the-fantabulous-emancipation-of-":"Acción",
+  "guardians-of-the-galaxy-volume-3":"Acción","spider-man-no-way-home":"Acción",
+  "the-amazing-spider-man-2":"Acción","spider-man-far-from-home":"Acción","spider-man-3":"Acción",
+  "spider-man-2":"Acción","spider-man":"Acción","spider-man-across-the-spider-verse":"Animación",
+  "spider-man-into-the-spider-verse":"Animación","maintenance-required":"Comedia",
+  "frequency":"Ciencia ficción","last-action-hero":"Acción","love-hurts-2025":"Acción",
+  "freakier-friday":"Comedia","the-sleeping-dictionary":"Romance","henchmen":"Animación",
+  "mortal-kombat-ii":"Acción","over-your-dead-body":"Terror","purple-hearts-2022":"Romance",
+  "jupiter-ascending":"Ciencia ficción","rio":"Animación","sahara-2017":"Aventura",
+  "the-wild-robot":"Animación","peter-rabbit":"Animación","next-gen":"Animación","luca":"Animación",
+  "strange-world":"Animación","dolittle":"Aventura","zookeeper":"Comedia","hoppers":"Animación",
+  "no-manches-frida":"Comedia","matusalen":"Comedia","quien-es-quien":"Comedia",
+  "upside-down":"Ciencia ficción","the-man-from-toronto":"Acción","drillbit-taylor":"Comedia",
+  "rush-hour":"Acción","maleficent-mistress-of-evil":"Fantasía","maleficent":"Fantasía",
+  "sonic-the-hedgehog-3":"Aventura","sonic-the-hedgehog-2":"Aventura","sonic-the-hedgehog":"Aventura",
+  "goat-2026":"Animación","liar-liar":"Comedia","sherlock-holmes":"Misterio",
+  "one-for-the-money":"Crimen","debs":"Comedia","the-marvels":"Acción",
+  "the-space-between-us":"Romance","spoiled-brats":"Comedia","we-bought-a-zoo":"Drama",
+  "the-hundred-foot-journey":"Drama","larry-crowne":"Comedia","the-intouchables":"Drama",
+  "the-family-man":"Drama","the-terminal":"Drama","a-perfect-pairing":"Romance",
+  "falling-inn-love":"Romance","four-to-dinner":"Comedia","regretting-you":"Drama",
+  "prom-pact":"Comedia","scouts-guide-to-the-zombie-apocalypse":"Terror","chicken-little":"Animación",
+  "arthur-3-the-war-of-the-two-worlds":"Animación","arthur-and-the-invisibles":"Animación",
+  "the-painted-veil":"Drama","toc-toc":"Comedia","night-teeth":"Terror","planes":"Animación",
+  "bad-boys":"Acción","blue-streak":"Comedia","predator-badlands":"Ciencia ficción",
+  "tracers":"Acción","ransom":"Thriller","cradle-2-the-grave":"Acción",
+  "dc-league-of-super-pets":"Animación","dead-in-a-week-or-your-money-back":"Comedia",
+  "air-bud-golden-receiver":"Familiar","air-bud":"Familiar","trouble-with-the-curve":"Drama",
+  "like-mike":"Comedia","the-rookie-2002":"Drama","goosebumps":"Aventura",
+  "the-next-karate-kid":"Acción","the-karate-kid-part-iii":"Acción","the-karate-kid-part-ii":"Acción",
+  "the-karate-kid":"Acción","aladdin":"Animación","hercules":"Animación",
+  "tom-and-jerry-the-movie":"Animación","oliver-company":"Animación",
+  "ice-age-collision-course":"Animación","ice-age-continental-drift":"Animación",
+  "ice-age-dawn-of-the-dinosaurs":"Animación","ice-age-the-meltdown":"Animación",
+  "ice-age":"Animación","the-lion-king-2-simbas-pride":"Animación","the-lion-king":"Animación",
+  "finding-nemo":"Animación","playdate":"Comedia","catch-me-if-you-can":"Drama",
+  "now-you-see-me":"Thriller","life-as-we-know-it":"Romance","accepted":"Comedia",
+  "avatar":"Ciencia ficción","zoom":"Aventura","the-knight-before-christmas":"Romance",
+  "never-back-down":"Acción","renfield":"Terror","zombieland":"Terror","next":"Ciencia ficción",
+  "m3gan-20":"Terror","recipe-for-love":"Romance","jennifers-body":"Terror",
+  "casper-a-spirited-beginning":"Familiar","nimona":"Animación","ruby-gillman-teenage-kraken":"Animación",
+  "kpop-demon-hunters":"Animación","the-rebound":"Romance","the-family-plan":"Acción",
+  "back-in-action":"Acción","big-stan":"Comedia","beethovens-2nd":"Familiar","beethoven":"Familiar",
+  "the-parent-trap-1998":"Familiar","yours-mine-and-ours":"Comedia","family-switch":"Comedia",
+  "the-war-with-grandpa":"Comedia","i-frankenstein":"Acción","freaky":"Terror",
+  "the-adam-project":"Ciencia ficción","love-guaranteed":"Romance","love-and-sunshine":"Romance",
+  "falling-for-christmas":"Romance","warm-bodies":"Romance","forgetting-sarah-marshall":"Comedia",
+  "leap-year":"Romance","just-my-luck":"Romance","two-weeks-notice":"Romance",
+  "abigail-2024":"Terror","blue-beetle":"Acción","samaritan":"Acción","boy-kills-world":"Acción",
+  "unleashed":"Acción","nobody":"Acción","ashby":"Comedia","holidate":"Romance",
+  "little-italy":"Romance","about-fate":"Romance","stuck-in-love":"Romance","float-2024":"Romance",
+  "a-working-man":"Acción","black-adam":"Acción","robocop-2014":"Acción","violent-night":"Acción",
+  "american-ultra":"Acción","the-spy-who-dumped-me":"Comedia","casino-royale":"Acción",
+  "megalodon":"Terror","groundhog-day":"Comedia","12-dates-of-christmas":"Romance",
+  "shes-out-of-my-league":"Comedia","mike-dave-need-wedding-dates":"Comedia","palm-springs":"Comedia",
+  "novocaine":"Acción","were-the-millers":"Comedia","m3gan":"Terror","automata":"Ciencia ficción",
+  "simulant":"Ciencia ficción","archive":"Ciencia ficción",
+  "superman-shazam-the-return-of-black-adam":"Animación","superman-vs-the-elite":"Animación",
+  "chef":"Comedia","hot-pursuit":"Comedia","legally-blonde":"Comedia",
+  "beauty-the-briefcase":"Romance","the-duff":"Comedia","big-fat-liar":"Comedia",
+  "love-other-drugs":"Romance","ted":"Comedia","ted-2":"Comedia","the-gorge":"Acción",
+  "king-arthur-legend-of-the-sword":"Aventura","set-it-up":"Romance","love-hard":"Romance",
+  "gods-of-egypt":"Aventura","whats-your-number":"Comedia",
+  "prince-of-persia-the-sands-of-time":"Aventura","the-tourist":"Thriller",
+  "lara-croft-tomb-raider-the-cradle-of-life":"Acción","lara-croft-tomb-raider":"Acción",
+  "wimbledon":"Romance","the-island":"Ciencia ficción","the-switch":"Comedia","love-rosie":"Romance",
+  "eddies-million-dollar-cook-off":"Familiar","fools-rush-in":"Romance","love-divided":"Drama",
+  "brother-bear-2":"Animación","brother-bear":"Animación","space-jam-a-new-legacy":"Animación",
+  "space-jam":"Animación","robinson-crusoe":"Animación","spies-in-disguise":"Animación",
+  "the-idea-of-you":"Romance","knight-and-day":"Acción","what-happens-in-vegas":"Comedia",
+  "to-all-the-boys-ive-loved-before":"Romance","geek-charming":"Romance","the-mask":"Comedia",
+  "kraven-the-hunter":"Acción","underdog":"Familiar","kung-fu-panda-3":"Animación",
+  "kung-fu-panda-4":"Animación","tangled":"Animación","meet-the-robinsons":"Animación",
+  "frozen-in-love":"Romance","fireheart":"Animación","ant-man-and-the-wasp-quantumania":"Acción",
+  "ant-man-and-the-wasp":"Acción","ant-man":"Acción","stardust":"Fantasía",
+  "the-incredibles":"Animación","gangster-squad":"Crimen","the-school-for-good-and-evil":"Fantasía",
+  "sky-high":"Aventura","the-hating-game":"Romance","robots":"Animación",
+  "this-is-where-i-leave-you":"Comedia","the-accountant":"Acción","gone-girl":"Thriller",
+  "firebreather":"Animación","the-amazing-spider-man":"Acción","pacific-rim-uprising":"Ciencia ficción",
+  "pacific-rim":"Ciencia ficción","ride-along":"Comedia","parker":"Acción",
+  "the-accidental-husband":"Romance","death-race":"Acción","jonah-hex":"Acción",
+  "drive-angry":"Acción","enola-holmes":"Misterio","the-holiday":"Romance","brick-mansions":"Acción",
+  "no-strings-attached":"Romance","one-small-hitch":"Romance","the-union":"Acción",
+  "heartbreak-ridge":"Bélica",
+  "alexander-and-the-terrible-horrible-no-good-very-b":"Comedia","mr-deeds":"Comedia",
+  "50-first-dates":"Romance","the-game-plan":"Comedia","serving-sara":"Comedia",
+  "paul-blart-mall-cop":"Comedia","the-pacifier":"Comedia","the-spy-next-door":"Comedia",
+  "no-reservations":"Romance","just-like-heaven":"Romance","kate-leopold":"Romance",
+  "sundays-at-tiffanys":"Romance","the-lucky-one":"Romance","the-ugly-truth":"Romance",
+  "the-other-zoey":"Romance","olympus-has-fallen":"Acción","london-has-fallen":"Acción",
+  "angel-has-fallen":"Acción","delivery-man":"Comedia","a-family-affair":"Romance",
+  "anger-management":"Comedia","blended":"Comedia","this-is-the-end":"Comedia",
+  "the-last-stand":"Acción","the-last-boy-scout":"Acción","stuber":"Comedia","man-on-fire":"Acción",
+  "art-of-love":"Romance","death-wish":"Acción","freelance":"Acción","i-robot":"Ciencia ficción",
+  "mrs-winterbourne":"Romance","zoroark-el-maestro-de-ilusiones":"Animación",
+  "pokemon-lucario-and-the-mystery-of-mew":"Animación","no-sleep-til-christmas":"Romance",
+  "the-mummy-returns":"Aventura","the-mummy":"Aventura","bedazzled":"Comedia","inside-out":"Animación",
+  "the-witch-part-2-the-other-one":"Acción","the-witch-part-1-the-subversion":"Acción",
+  "hansel-gretel-witch-hunters":"Acción","checkmates":"Comedia","alita-battle-angel":"Ciencia ficción",
+  "doctor-dolittle-1998":"Familiar","matilda":"Familiar","jumanji":"Aventura",
+  "atlas-2024":"Ciencia ficción","turning-red":"Animación","elemental":"Animación",
+  "when-we-first-met":"Romance","its-a-boy-girl-thing":"Comedia","loser":"Comedia",
+  "trojan-war":"Comedia","freaks-of-nature":"Terror","red":"Acción","geostorm":"Ciencia ficción",
+  "walking-tall":"Acción","planet-hulk":"Animación","the-incredible-hulk":"Acción",
+  "hulk-vs":"Animación","bloodshot":"Acción","prey-for-the-devil":"Terror",
+  "the-croods-a-new-age":"Animación","rio-2":"Animación","flushed-away":"Animación",
+  "tarzan":"Animación","madagascar-3-europes-most-wanted":"Animación",
+  "madagascar-escape-2-africa":"Animación","madagascar":"Animación","gi-joe-the-rise-of-cobra":"Acción",
+  "battleship":"Ciencia ficción","how-to-train-your-dragon":"Animación","the-sea-beast":"Animación",
+  "rumble-2021":"Animación","bulletproof-monk":"Acción","the-beekeeper":"Acción","homefront":"Acción",
+  "safe":"Acción","meg-2-the-trench":"Terror","the-meg":"Terror","rampage-2018":"Acción",
+  "kong-skull-island":"Aventura","puppy-love":"Romance","godzilla-vs-kong":"Acción",
+  "godzilla":"Ciencia ficción","mechanic-resurrection":"Acción","kim-possible-so-the-drama":"Animación",
+  "suicide-squad":"Acción","the-longest-ride":"Romance","a-good-day-to-die-hard":"Acción",
+  "live-free-or-die-hard":"Acción","die-hard-with-a-vengeance":"Acción","die-hard-2":"Acción",
+  "die-hard":"Acción","security":"Acción","day-shift":"Acción","jason-bourne":"Acción",
+  "the-bourne-legacy":"Acción","the-bourne-ultimatum":"Acción","the-bourne-supremacy":"Acción",
+  "the-bourne-identity":"Acción","argylle":"Acción","road-house-2024":"Acción",
+  "overboard-2018":"Comedia","the-tuxedo":"Acción","the-tomorrow-war":"Ciencia ficción",
+  "back-to-the-future-part-iii":"Ciencia ficción","back-to-the-future-part-ii":"Ciencia ficción",
+  "back-to-the-future":"Ciencia ficción","men-in-black-international":"Ciencia ficción",
+  "men-in-black-3":"Ciencia ficción","men-in-black-ii":"Ciencia ficción","men-in-black":"Ciencia ficción",
+  "pitch-black":"Ciencia ficción","over-the-hedge":"Animación","the-mitchells-vs-the-machines":"Animación",
+  "free-guy":"Comedia","ripd":"Acción","the-proposal":"Romance","the-change-up":"Comedia",
+  "definitely-maybe":"Romance","ghosted":"Romance","the-bad-guys":"Animación","zootopia":"Animación",
+  "mavka-the-forest-song":"Animación","how-i-became-a-superhero":"Acción","anyone-but-you":"Romance",
+
+  "rj-decker":"Drama","outside-providence":"Comedia","the-sheep-detectives":"Animación",
+  "outside-the-wire":"Ciencia ficción","love-in-slow-motion":"Romance","dust-bunny":"Terror",
+  "crime-101":"Crimen","playing-for-keeps-2012":"Romance","heart-eyes":"Terror",
+  "jack-the-giant-slayer":"Aventura","a-good-year":"Romance","red-riding-hood":"Fantasía",
+  "people-we-meet-on-vacation":"Romance","27-dresses":"Romance","sketch":"Fantasía",
+  "the-running-man-2025":"Ciencia ficción","guns-up":"Acción","my-cousin-vinny":"Comedia",
+  "black-lotus":"Acción","the-truman-show":"Drama","in-the-lost-lands":"Fantasía",
+  "in-the-sub-for-love":"Romance","caramelo":"Comedia","caught-stealing":"Crimen",
+  "the-roses":"Comedia","woodwalkers":"Fantasía","the-emoji-movie":"Animación",
+  "garfield":"Animación","love-romance-chocolate":"Romance","almost-cops":"Comedia",
+  "witless-protection":"Comedia","the-boy-who-cried-werewolf":"Familiar","disenchanted":"Musical",
+  "fantastic-four-2005":"Acción","heads-of-state":"Acción","upgraded":"Romance",
+  "finding-you":"Romance","the-flight-before-christmas-2015":"Romance","a-very-merry-mix-up":"Romance",
+  "crazy-lizard":"Comedia","winter-spring-summer-or-fall":"Romance","my-dead-friend-zoe":"Drama",
+  "shadow-force":"Acción","where-the-heart-is":"Drama","alarum":"Acción",
+  "fountain-of-youth":"Aventura","yes-day":"Comedia","a-minecraft-movie":"Aventura",
+  "the-wedding-planner":"Romance","mean-machine":"Drama","happy-gilmore":"Comedia",
+  "the-electric-state":"Ciencia ficción","the-gangster-the-cop-the-devil":"Crimen",
+  "turner-hooch":"Comedia","cash-out":"Acción","youre-cordially-invited":"Comedia",
+  "babygirl-2024":"Drama","mesa-de-regalos":"Comedia","spellbound-2024":"Animación",
+  "which-brings-me-to-you":"Romance","army-of-darkness":"Terror","last-vegas":"Comedia",
+  "office-space":"Comedia","robot-overlords":"Ciencia ficción","cowboys-aliens":"Ciencia ficción",
+  "wild-wild-west":"Western","abigail":"Terror","hit-man":"Comedia",
+  "kingdom-of-the-planet-of-the-apes":"Ciencia ficción","como-dios-manda":"Comedia",
+  "everyne-falls":"Drama","vampiras-the-brides":"Terror","shaft":"Acción","dampyr":"Terror",
+  "viking-wolf":"Terror","plane":"Acción","gamer":"Ciencia ficción","mercy-2023":"Acción",
+  "upon-the-magic-roads":"Fantasía","luck":"Animación",
+  "young-detective-dee-rise-of-the-sea-dragon":"Acción","how-to-survive-without-mum":"Comedia",
+  "your-highness":"Comedia","mr-monks-last-case-a-monk-movie":"Misterio",
+  "legend-of-the-fist-the-return-of-chen-zhen":"Acción","the-three-musketeers-milady":"Aventura",
+  "along-with-the-gods-the-two-worlds":"Fantasía","southpaw":"Drama","mama-o-papa":"Comedia",
+  "wish":"Animación","the-croods":"Animación","safe-house":"Acción","cat-person":"Thriller",
+  "irish-wish":"Romance","damsel-2024":"Fantasía","code-8-part-ii":"Ciencia ficción",
+  "the-hollars":"Drama","the-illusionist":"Misterio","magic-in-the-moonlight":"Romance",
+  "players":"Romance","the-last-legion":"Aventura","millers-girl":"Drama","notes-on-a-summer":"Drama",
+  "past-lives":"Romance","inside-man-2023":"Crimen","mea-culpa-2024":"Thriller","heist-88":"Crimen",
+  "the-gray-man":"Acción","they-will-kill-you":"Terror",
+
+  "you-me-her":"Romance","scorpion":"Acción","elle":"Drama","lie-to-me":"Drama",
+  "marvels-daredevil":"Acción","awkward":"Comedia","loki":"Ciencia ficción","young-sherlock":"Misterio",
+  "big-time-rush":"Comedia","nikita":"Acción","vampirina-teenage-vampire":"Animación",
+  "cobra-kai":"Acción","creature-commandos":"Animación","young-sheldon":"Comedia",
+  "murderbot":"Ciencia ficción","hart-of-dixie":"Drama","youre-the-worst":"Comedia",
+  "alex-rider":"Acción","whiskey-cavalier":"Acción","batman-the-brave-and-the-bold":"Animación",
+  "the-batman":"Animación","my-adventures-with-superman":"Animación","invincible":"Animación",
+  "the-mentalist":"Crimen","ted-lasso":"Comedia","smallville":"Ciencia ficción",
+  "ben-10-alien-force":"Animación","ben-10-2005":"Animación","izombie":"Comedia","fubar":"Acción",
+  "helstrom":"Terror","grimm":"Fantasía","wednesday":"Comedia","harley-quinn":"Animación",
+
+  "lanterns":"Ciencia ficción","mobland":"Crimen","the-final-problem":"Drama",
+  "sledge-hammer":"Comedia","the-glades":"Crimen","elsbeth":"Crimen","the-neighborhood":"Comedia",
+  "jane-the-virgin":"Comedia","kevin-can-wait":"Comedia","knight-rider":"Acción",
+  "the-new-adventures-of-old-christine":"Comedia","morfeusz":"Drama","off-campus":"Drama",
+  "the-good-place":"Comedia","ride-or-die":"Drama","ugly-betty":"Comedia","ghosts":"Comedia",
+  "the-diplomat":"Drama","lucky-luke-2026":"Western","la-brea":"Ciencia ficción",
+  "remington-steele":"Misterio","90210":"Drama","wolf-king":"Fantasía","envidiosa":"Comedia",
+  "margos-got-money-troubles":"Comedia","this-is-us":"Drama","the-last-ship":"Ciencia ficción",
+  "justified":"Crimen","covert-affairs":"Acción","blindspot":"Crimen","el-agente-nocturno":"Acción",
+  "melissa-joey":"Comedia","sonny-with-a-chance":"Comedia","good-luck-charlie":"Comedia",
+  "jessie":"Comedia","the-dragon-prince":"Animación","marvels-avengers-assemble":"Animación",
+  "mike-and-molly":"Comedia","tehran":"Thriller","24":"Acción","lois-clark":"Ciencia ficción",
+  "you":"Thriller","billy-the-kid":"Western","emily-in-paris":"Comedia","white-collar":"Crimen",
+  "todo-el-mundo-odia-a-chris":"Comedia","phil-of-the-future":"Comedia","obliterated":"Acción",
+  "hawaii-five-0":"Acción","the-oc":"Drama","numb3rs":"Crimen","unforgettable":"Crimen",
+  "chad-powers":"Comedia","slow-horses":"Thriller","tulsa-king":"Crimen","high-potential":"Crimen",
+  "old-dog-new-tricks":"Comedia","kakuriyo-no-yadomeshi":"Animación",
+  "cross-ange-tenshi-to-ryuu-no-rondo":"Animación","frasier":"Comedia","gossip-girl":"Drama",
+  "manifest":"Ciencia ficción","the-mick":"Comedia","gilmore-girls":"Drama","cougar-town":"Comedia",
+  "austin-ally":"Comedia","ally-mcbeal":"Drama","community":"Comedia","con-el-culo-al-aire":"Comedia",
+  "degrassi":"Drama","resident-alien":"Ciencia ficción","life-sentence":"Comedia",
+  "good-cop-bad-cop-2025":"Crimen","running-point":"Comedia","pequenas-coincidencias":"Comedia",
+  "dark-matter":"Ciencia ficción","that-70s-show":"Comedia","cracow-monsters":"Terror",
+  "shrinking":"Comedia","professor-t":"Crimen","wonder-woman":"Acción","devil-may-cry-2025":"Animación",
+  "devil-may-cry":"Animación","boy-meets-world":"Comedia","bones":"Crimen","burn-notice":"Acción",
+  "sacred-seven":"Animación","high-card-8":"Animación","bounen-no-xamdou":"Animación",
+  "looney-tunes-cartoons":"Animación","candice-renoir":"Crimen","tracker":"Acción",
+  "wild-cards":"Crimen","drake-and-josh":"Comedia","revenge":"Drama","how-i-met-your-mother":"Comedia",
+  "the-middle":"Comedia","sonic-x-cap-5":"Animación","2-broke-girls":"Comedia","kung-fu":"Acción",
+  "legend-of-the-seeker":"Fantasía","parks-and-recreation":"Comedia","suburgatory":"Comedia",
+  "los-increibles-powell":"Comedia","the-listener":"Crimen","new-girl":"Comedia",
+  "the-odd-couple":"Comedia","brandy_y_mr_whiskers_618":"Animación","malcolm-in-the-middle":"Comedia",
+  "death-in-paradise":"Crimen","echo":"Acción","doctor-who-2024":"Ciencia ficción","glee":"Musical",
+  "barry":"Crimen","hannibal":"Thriller","see":"Ciencia ficción","scott-pilgrim-takes-off":"Animación",
+  "slugterra":"Animación","the-equalizer":"Acción","the-penguins-of-madagascar":"Animación",
+  "dreamworks-dragons":"Animación","knuckles":"Comedia","last-man-standing":"Comedia",
+  "van-helsing-2016":"Terror","poker-face":"Crimen","heirs-of-the-night":"Fantasía",
+  "school-spirits":"Misterio","kim-possible":"Animación","teenage-bounty-hunters":"Comedia",
+  "wakfu":"Animación","the-thundermans":"Comedia","outlander":"Drama","into-the-badlands":"Acción",
+  "mr-mrs-smith":"Acción","the-artful-dodger":"Drama"
+};
+
+/* --------------------------------------------------------------- */
+
+let items = load();
+let activeTab = 'all';
+let activeGenre = 'all';
+let query = '';
+let searchGlobal = false;
+
+function load(){
+  // 1) intentar localStorage
+  try {
+    const stored = localStorage.getItem(STORAGE_KEY);
+    if (stored){
+      const parsed = JSON.parse(stored);
+      if (Array.isArray(parsed) && parsed.length) return parsed;
+    }
+  } catch {}
+  // 2) si está vacío, usar el seed incrustado en el HTML
+  try {
+    const seed = document.getElementById('seed-data');
+    if (seed){
+      const parsed = JSON.parse(seed.textContent);
+      if (Array.isArray(parsed) && parsed.length) return parsed;
+    }
+  } catch {}
+  return [];
+}
+function save(){ localStorage.setItem(STORAGE_KEY, JSON.stringify(items)); }
+
+function normalizeUrl(u){
+  u = String(u).trim();
+  return /^https?:\/\//i.test(u) ? u : 'https://' + u;
+}
+function hostname(u){ try { return new URL(u).hostname; } catch { return ''; } }
+function favicon(u){
+  const h = hostname(u);
+  return h ? `https://www.google.com/s2/favicons?domain=${h}&sz=64` : '';
+}
+function extractSlug(u){
+  try {
+    const url = new URL(u);
+    const parts = url.pathname.split('/').filter(Boolean);
+    return (parts[parts.length - 1] || '').toLowerCase();
+  } catch { return ''; }
+}
+function escapeHtml(s){
+  return String(s).replace(/[&<>"']/g, c => (
+    {'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]
+  ));
+}
+
+function switchView(view){
+  document.querySelectorAll('.main-nav button').forEach(b => {
+    b.classList.toggle('active', b.dataset.view === view);
+  });
+  document.querySelectorAll('.view').forEach(v => {
+    v.classList.toggle('active', v.id === 'view-' + view);
+  });
+  if (view === 'add'){
+    setTimeout(() => document.getElementById('f-title').focus(), 100);
+  }
+}
+
+function renderTabs(){
+  const list = [{key:'all', label:'Todos'}].concat(CATEGORIES.map(c => ({key:c, label:c})));
+  document.getElementById('tabsList').innerHTML =
+    `<span class="label">Lista</span>` +
+    list.map(t => {
+      const count = t.key === 'all' ? items.length
+        : items.filter(i => i.category === t.key).length;
+      const active = t.key === activeTab ? ' active' : '';
+      return `<button class="tab${active}" data-tab="${t.key}">
+        ${t.label}<span class="count">${count}</span></button>`;
+    }).join('');
+
+  const usedGenres = [...new Set(items.map(i => i.genre).filter(Boolean))].sort();
+  const genreList = [{key:'all', label:'Todos'}].concat(usedGenres.map(g => ({key:g, label:g})));
+  const sinGeneroCount = items.filter(i => !i.genre).length;
+
+  document.getElementById('tabsGenre').innerHTML =
+    `<span class="label">Género</span>` +
+    genreList.map(t => {
+      const count = t.key === 'all' ? items.length
+        : items.filter(i => i.genre === t.key).length;
+      const active = t.key === activeGenre ? ' active' : '';
+      return `<button class="tab${active}" data-genre="${t.key}">
+        ${t.label}<span class="count">${count}</span></button>`;
+    }).join('') +
+    (sinGeneroCount
+      ? `<button class="tab${activeGenre==='__none'?' active':''}"
+                 data-genre="__none">Sin género<span class="count">${sinGeneroCount}</span></button>`
+      : '');
+}
+
+function renderGrid(){
+  const grid = document.getElementById('grid');
+  const q = query.trim().toLowerCase();
+
+  let list = items;
+
+  if (!(q && searchGlobal)) {
+    list = list.filter(i => activeTab === 'all' || i.category === activeTab);
+    list = list.filter(i => {
+      if (activeGenre === 'all') return true;
+      if (activeGenre === '__none') return !i.genre;
+      return i.genre === activeGenre;
+    });
+  }
+
+  if (q) {
+    list = list.filter(i =>
+      i.title.toLowerCase().includes(q) ||
+      i.url.toLowerCase().includes(q) ||
+      (i.notes||'').toLowerCase().includes(q) ||
+      (i.genre||'').toLowerCase().includes(q) ||
+      (i.category||'').toLowerCase().includes(q)
+    );
+  }
+
+  list = list.slice().sort((a,b) => b.createdAt - a.createdAt);
+
+  if (!list.length){
+    grid.innerHTML = `<div class="empty">Nada por aquí todavía.</div>`;
+    return;
+  }
+
+  grid.innerHTML = list.map(i => `
+    <div class="card">
+      <img src="${favicon(i.url)}" alt="" loading="lazy"
+           onerror="this.style.visibility='hidden'">
+      <div class="body">
+        <a href="${i.url}" target="_blank" rel="noopener">${escapeHtml(i.title)}</a>
+        <div class="url">${escapeHtml(hostname(i.url))}</div>
+        <div class="tags">
+          <span class="tag">${escapeHtml(i.category)}</span>
+          ${i.genre ? `<span class="tag genre">${escapeHtml(i.genre)}</span>` : ''}
+        </div>
+        ${i.notes ? `<div class="notes">${escapeHtml(i.notes)}</div>` : ''}
+      </div>
+      <button class="del" data-del="${i.id}" title="Eliminar">✕</button>
+    </div>
+  `).join('');
+}
+
+function render(){ renderTabs(); renderGrid(); }
+
+document.querySelector('.main-nav').addEventListener('click', e => {
+  const btn = e.target.closest('[data-view]'); if (!btn) return;
+  switchView(btn.dataset.view);
+});
+
+document.getElementById('tabsList').addEventListener('click', e => {
+  const btn = e.target.closest('[data-tab]'); if (!btn) return;
+  activeTab = btn.dataset.tab; render();
+});
+document.getElementById('tabsGenre').addEventListener('click', e => {
+  const btn = e.target.closest('[data-genre]'); if (!btn) return;
+  activeGenre = btn.dataset.genre; render();
+});
+document.getElementById('grid').addEventListener('click', e => {
+  const btn = e.target.closest('[data-del]'); if (!btn) return;
+  if (!confirm('¿Eliminar este marcador?')) return;
+  items = items.filter(i => i.id !== btn.dataset.del);
+  save(); render();
+});
+document.getElementById('search').addEventListener('input', e => {
+  query = e.target.value; renderGrid();
+});
+document.getElementById('searchGlobal').addEventListener('change', e => {
+  searchGlobal = e.target.checked; renderGrid();
+});
+document.getElementById('form').addEventListener('submit', e => {
+  e.preventDefault();
+  const f = e.target;
+  const data = new FormData(f);
+  const url = normalizeUrl(data.get('url'));
+  items.push({
+    id: crypto.randomUUID(),
+    title: data.get('title').trim(),
+    url,
+    category: data.get('category'),
+    genre: data.get('genre'),
+    notes: data.get('notes').trim(),
+    createdAt: Date.now()
+  });
+  save(); f.reset();
+  render();
+  switchView('list');
+});
+
+function autoclasificar(force){
+  let updated = 0, sinGenero = 0;
+  items = items.map(i => {
+    if (i.genre && !force) return i;
+    const slug = extractSlug(i.url);
+    const genre = GENRE_MAP[slug];
+    if (genre){
+      if (i.genre !== genre || force){ updated++; }
+      return { ...i, genre };
+    }
+    if (!i.genre) sinGenero++;
+    return i;
+  });
+  save(); render();
+  alert(
+    `✅ Géneros ${force ? 'reasignados' : 'asignados'}: ${updated}\n` +
+    `⚠️ Sin coincidencia en el diccionario: ${sinGenero}`
+  );
+}
+document.getElementById('autoclasificar').onclick = () => autoclasificar(false);
+document.getElementById('autoclasificarForce').onclick = () => {
+  if (confirm('Esto reasignará el género a TODOS los marcadores, sobreescribiendo lo que hayas puesto a mano. ¿Seguir?'))
+    autoclasificar(true);
+};
+
+/* ---------- descargar HTML autocontenido ---------- */
+document.getElementById('download').addEventListener('click', () => {
+  save(); // asegurar que localStorage tiene lo último
+
+  // clonar el documento actual
+  const clone = document.documentElement.cloneNode(true);
+
+  // inyectar los datos actuales como seed
+  const seed = clone.querySelector('#seed-data');
+  if (seed) seed.textContent = JSON.stringify(items);
+
+  // limpiar inputs del clon (por si el usuario dejó texto a medias)
+  clone.querySelectorAll('input, textarea').forEach(el => {
+    if (el.type !== 'checkbox' && el.tagName !== 'SELECT') el.setAttribute('value', '');
+    if (el.tagName === 'TEXTAREA') el.textContent = '';
+  });
+
+  // reconstruir el HTML completo
+  const html = '<!DOCTYPE html>\n' + clone.outerHTML;
+
+  // descargar
+  const blob = new Blob([html], {type:'text/html;charset=utf-8'});
+  const a = document.createElement('a');
+  a.href = URL.createObjectURL(blob);
+  a.download = 'mis-marcadores.html';
+  a.click();
+  URL.revokeObjectURL(a.href);
+});
+
+/* ---------- exportar / importar ---------- */
+document.getElementById('export').addEventListener('click', () => {
+  const blob = new Blob([JSON.stringify(items, null, 2)], {type:'application/json'});
+  const a = document.createElement('a');
+  a.href = URL.createObjectURL(blob);
+  a.download = `marcadores-${new Date().toISOString().slice(0,10)}.json`;
+  a.click(); URL.revokeObjectURL(a.href);
+});
+document.getElementById('import').addEventListener('click', () => {
+  document.getElementById('file').click();
+});
+document.getElementById('file').addEventListener('change', e => {
+  const file = e.target.files[0]; if (!file) return;
+  const reader = new FileReader();
+  reader.onload = () => {
+    try {
+      const incoming = JSON.parse(reader.result);
+      if (!Array.isArray(incoming)) throw new Error('Formato inválido');
+      const existingIds = new Set(items.map(i => i.id));
+      const nuevos = incoming
+        .filter(i => i.id && !existingIds.has(i.id))
+        .map(i => ({
+          id: i.id, title: i.title || '', url: normalizeUrl(i.url || ''),
+          category: i.category || CATEGORIES[0], genre: i.genre || '',
+          notes: i.notes || '', createdAt: i.createdAt || Date.now()
+        }));
+      items = items.concat(nuevos);
+      save(); render();
+      alert(`Importados ${nuevos.length} marcadores.`);
+    } catch (err) { alert('No se pudo importar: ' + err.message); }
+  };
+  reader.readAsText(file); e.target.value = '';
+});
+
+(function init(){
+  document.getElementById('f-cat').innerHTML =
+    CATEGORIES.map(c => `<option>${c}</option>`).join('');
+  document.getElementById('f-genre').innerHTML =
+    `<option value="">Sin género</option>` +
+    GENRES.map(g => `<option>${g}</option>`).join('');
+  render();
+})();
+</script>
+
+</body></html>
